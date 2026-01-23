@@ -14,7 +14,7 @@ export function Hero() {
     <section
       id="home"
       ref={heroRef}
-      className="min-h-screen flex flex-col justify-center items-center px-4 sm:px-6 relative overflow-hidden"
+      className="min-h-screen flex flex-col justify-center items-center px-4 sm:px-6 py-20 sm:py-0 relative overflow-hidden"
     >
       {/* 3D Particle Background */}
       <HeroBackground />
@@ -40,7 +40,7 @@ export function Hero() {
       {/* Main Content */}
       <motion.div
         style={{ y: heroY, opacity: heroOpacity, scale: scaleProgress }}
-        className="max-w-5xl mx-auto text-center space-y-8 relative z-10"
+        className="max-w-5xl mx-auto text-center space-y-4 sm:space-y-8 relative z-10"
       >
         {/* Greeting Badge */}
         <motion.div
@@ -63,9 +63,9 @@ export function Hero() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="space-y-4"
+          className="space-y-2 sm:space-y-4"
         >
-          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight">
+          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight">
             <span className="bg-clip-text text-transparent bg-linear-to-r from-slate-100 via-slate-200 to-slate-400">
               Hi, I&apos;m Hamza
             </span>
@@ -76,7 +76,7 @@ export function Hero() {
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3, duration: 0.6 }}
-              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold bg-clip-text text-transparent bg-linear-to-r from-sky-400 via-cyan-400 to-emerald-400"
+              className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold bg-clip-text text-transparent bg-linear-to-r from-sky-400 via-cyan-400 to-emerald-400"
             >
               Frontend Developer
             </motion.h2>
@@ -88,7 +88,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.8 }}
-          className="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed"
+          className="text-base sm:text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed px-2"
         >
           Building modern, responsive web interfaces with clean code and
           pixel-perfect design. Specialized in React, TypeScript, and creating
@@ -100,11 +100,11 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.6 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4"
+          className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 pt-2 sm:pt-4 w-full sm:w-auto px-2 sm:px-0"
         >
           <motion.a
             href="#works"
-            className="group relative px-8 py-4 rounded-full bg-linear-to-r from-sky-500 to-emerald-500 text-white font-semibold text-sm overflow-hidden shadow-lg shadow-sky-500/25"
+            className="group relative px-6 sm:px-8 py-3 sm:py-4 rounded-full bg-linear-to-r from-sky-500 to-emerald-500 text-white font-semibold text-sm overflow-hidden shadow-lg shadow-sky-500/25 w-full sm:w-auto text-center"
             whileHover={{
               scale: 1.05,
               boxShadow: "0 20px 40px -10px rgba(56, 189, 248, 0.4)",
@@ -117,11 +117,40 @@ export function Hero() {
 
           <motion.a
             href="#contact"
-            className="px-8 py-4 rounded-full border border-slate-700 text-slate-300 font-semibold text-sm hover:border-slate-500 hover:text-white transition-all duration-300 backdrop-blur-sm"
+            className="px-6 sm:px-8 py-3 sm:py-4 rounded-full border border-slate-700 text-slate-300 font-semibold text-sm hover:border-slate-500 hover:text-white transition-all duration-300 backdrop-blur-sm w-full sm:w-auto text-center"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
           >
             Get In Touch
+          </motion.a>
+
+          <motion.a
+            href="/Hamza_Haikal_Front End Developer_resume (2).pdf"
+            download="Hamza_Haikal_CV.pdf"
+            className="group relative px-6 sm:px-8 py-3 sm:py-4 rounded-full border-2 border-transparent bg-linear-to-r from-sky-500/10 to-emerald-500/10 text-slate-300 font-semibold text-sm overflow-hidden backdrop-blur-sm w-full sm:w-auto text-center"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <div className="absolute inset-0 rounded-full bg-linear-to-r from-sky-500 to-emerald-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+            <div className="absolute inset-0 rounded-full p-[2px] bg-linear-to-r from-sky-500 to-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="w-full h-full rounded-full bg-slate-950" />
+            </div>
+            <span className="relative z-10 flex items-center gap-2">
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+              Download CV
+            </span>
           </motion.a>
         </motion.div>
       </motion.div>
@@ -131,7 +160,7 @@ export function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1, duration: 0.6 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 hidden sm:block"
       >
         <motion.div
           animate={{ y: [0, 8, 0] }}
