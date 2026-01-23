@@ -1,0 +1,15 @@
+/* Extra micro-detail tweaks that complement Tailwind classes */
+
+#root {
+  width: 100%;
+}
+
+main {
+  scroll-behavior: smooth;
+}
+
+@media (max-width: 640px) {
+  header nav {
+    padding-inline: 1rem;
+  }
+}
