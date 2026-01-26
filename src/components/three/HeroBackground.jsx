@@ -1,4 +1,4 @@
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useState, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float } from "@react-three/drei";
 import * as THREE from "three";
@@ -9,7 +9,8 @@ function FloatingParticles() {
   // Create particles manually - reduce count on mobile
   const particles = useMemo(() => {
     const isMobile = window.innerWidth < 768;
-    const count = isMobile ? 800 : 2000; // Reduce particles on mobile
+    const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
+    const count = isMobile ? 0 : isTablet ? 400 : 1500; // Reduced from 2000
     const positions = new Float32Array(count * 3);
 
     for (let i = 0; i < count; i++) {
@@ -28,6 +29,8 @@ function FloatingParticles() {
       ref.current.rotation.y += delta * 0.03;
     }
   });
+
+  if (particles.length === 0) return null;
 
   return (
     <points ref={ref}>
@@ -80,11 +83,56 @@ function InteractiveShape() {
 }
 
 export function HeroBackground() {
+  // Robust mobile detection - check both viewport and user agent
+  const isMobileDevice = () => {
+    if (typeof window === "undefined") return false;
+
+    // Check viewport width
+    const isMobileViewport = window.innerWidth < 768;
+
+    // Check user agent for mobile devices
+    const isMobileUA =
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent,
+      );
+
+    // Return true if either condition is met
+    return isMobileViewport || isMobileUA;
+  };
+
+  const [isMobile, setIsMobile] = useState(isMobileDevice);
+
+  useEffect(() => {
+    // Check if mobile on mount and resize
+    const checkMobile = () => {
+      setIsMobile(isMobileDevice());
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   // Optimize DPR based on device
   const dpr = useMemo(() => {
-    const isMobile = window.innerWidth < 768;
     return Math.min(window.devicePixelRatio, isMobile ? 1 : 2);
-  }, []);
+  }, [isMobile]);
+
+  // On mobile, return a lightweight CSS gradient instead of Three.js
+  if (isMobile) {
+    return (
+      <div
+        className="absolute inset-0 -z-10"
+        style={{
+          background: `
+            radial-gradient(ellipse at top, rgba(14, 165, 233, 0.15) 0%, transparent 50%),
+            radial-gradient(ellipse at bottom right, rgba(56, 189, 248, 0.1) 0%, transparent 50%),
+            radial-gradient(ellipse at bottom left, rgba(6, 182, 212, 0.08) 0%, transparent 50%)
+          `,
+        }}
+      />
+    );
+  }
 
   return (
     <div className="absolute inset-0 -z-10">
@@ -94,9 +142,12 @@ export function HeroBackground() {
           antialias: false, // Disable antialiasing for better performance
           alpha: true,
           powerPreference: "high-performance",
+          stencil: false, // Disable stencil buffer
+          depth: true,
         }}
         dpr={dpr}
         style={{ background: "transparent" }}
+        performance={{ min: 0.5 }} // Allow frame rate to drop if needed
       >
         <ambientLight intensity={0.5} />
         <FloatingParticles />
