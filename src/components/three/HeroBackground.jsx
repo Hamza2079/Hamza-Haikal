@@ -1,7 +1,6 @@
 import { useRef, useMemo, useState, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float } from "@react-three/drei";
-import * as THREE from "three";
 
 function FloatingParticles() {
   const ref = useRef();

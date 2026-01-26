@@ -1,10 +1,24 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
-import { HeroBackground } from "../three/HeroBackground";
-import LightRays from "../three/LightRays";
+import { useRef, lazy, Suspense } from "react";
+import {
+  useIsMobile,
+  usePrefersReducedMotion,
+} from "../../hooks/useMediaQuery";
+
+// Dynamically import 3D components only on desktop
+// This prevents Three.js libraries from loading on mobile
+const HeroBackground = lazy(() =>
+  import("../three/HeroBackground").then((module) => ({
+    default: module.HeroBackground,
+  })),
+);
+const LightRays = lazy(() => import("../three/LightRays"));
 
 export function Hero() {
   const heroRef = useRef(null);
+  const isMobile = useIsMobile();
+  const prefersReducedMotion = usePrefersReducedMotion();
+
   const { scrollYProgress } = useScroll();
   const heroY = useTransform(scrollYProgress, [0, 0.5], [0, -150]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
@@ -16,23 +30,43 @@ export function Hero() {
       ref={heroRef}
       className="min-h-screen flex flex-col justify-center items-center px-4 sm:px-6 py-20 sm:py-0 relative overflow-hidden"
     >
-      {/* 3D Particle Background */}
-      <HeroBackground />
-
-      {/* Light Rays Effect */}
-      <div className="absolute inset-0 z-2">
-        <LightRays
-          raysOrigin="top-center"
-          raysColor="#38bdf8"
-          raysSpeed={0.8}
-          lightSpread={1.2}
-          rayLength={1.5}
-          followMouse={true}
-          mouseInfluence={0.15}
-          pulsating={true}
-          fadeDistance={1.0}
+      {/* 3D Particle Background - Desktop Only */}
+      {!isMobile ? (
+        <Suspense fallback={null}>
+          <HeroBackground />
+        </Suspense>
+      ) : (
+        // Lightweight CSS gradient fallback for mobile
+        <div
+          className="absolute inset-0 -z-10"
+          style={{
+            background: `
+              radial-gradient(ellipse at top, rgba(14, 165, 233, 0.15) 0%, transparent 50%),
+              radial-gradient(ellipse at bottom right, rgba(56, 189, 248, 0.1) 0%, transparent 50%),
+              radial-gradient(ellipse at bottom left, rgba(6, 182, 212, 0.08) 0%, transparent 50%)
+            `,
+          }}
         />
-      </div>
+      )}
+
+      {/* Light Rays Effect - Desktop Only */}
+      {!isMobile && (
+        <Suspense fallback={null}>
+          <div className="absolute inset-0 z-2">
+            <LightRays
+              raysOrigin="top-center"
+              raysColor="#38bdf8"
+              raysSpeed={0.8}
+              lightSpread={1.2}
+              rayLength={1.5}
+              followMouse={true}
+              mouseInfluence={0.15}
+              pulsating={true}
+              fadeDistance={1.0}
+            />
+          </div>
+        </Suspense>
+      )}
 
       {/* Gradient Overlay */}
       <div className="absolute inset-0 bg-linear-to-b from-transparent via-slate-950/30 to-slate-950/80 pointer-events-none z-1" />

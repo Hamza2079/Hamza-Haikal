@@ -46,7 +46,12 @@ export default defineConfig({
         manualChunks: {
           // Vendor chunks
           "react-vendor": ["react", "react-dom"],
-          "three-vendor": ["three", "@react-three/fiber", "@react-three/drei"],
+          "three-vendor": [
+            "three",
+            "@react-three/fiber",
+            "@react-three/drei",
+            "ogl",
+          ],
           "animation-vendor": ["framer-motion"],
           "ui-vendor": ["react-icons", "@emailjs/browser"],
         },
