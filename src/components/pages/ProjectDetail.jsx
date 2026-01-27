@@ -24,7 +24,7 @@ export function ProjectDetail() {
       <section className="relative pt-32 pb-20 px-4 sm:px-6 overflow-hidden">
         {/* Background Elements */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-sky-500/10 to-transparent rounded-full blur-3xl" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-linear-to-b from-sky-500/10 to-transparent rounded-full blur-3xl" />
         </div>
 
         <div className="max-w-6xl mx-auto relative z-10">
@@ -69,7 +69,7 @@ export function ProjectDetail() {
               <span className="text-slate-400">{project.year}</span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-slate-100 via-slate-200 to-slate-400">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-linear-to-r from-slate-100 via-slate-200 to-slate-400">
               {project.title}
             </h1>
 
@@ -168,7 +168,7 @@ export function ProjectDetail() {
                     className="flex items-start gap-3"
                   >
                     <svg
-                      className="w-6 h-6 text-sky-400 flex-shrink-0 mt-0.5"
+                      className="w-6 h-6 text-sky-400 shrink-0 mt-0.5"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"

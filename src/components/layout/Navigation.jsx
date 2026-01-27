@@ -33,28 +33,30 @@ function NavigationComponent({ activeNav, setActiveNav }) {
   const handleNavClick = useCallback(
     (id) => {
       if (location.pathname !== "/") {
-        navigate(`/#${id}`);
+        navigate("/", { state: { targetId: id } });
       } else {
         scrollToSection(id);
-        setActiveNav(id);
+        if (setActiveNav) setActiveNav(id);
       }
       setMobileMenuOpen(false);
     },
     [location.pathname, navigate, scrollToSection, setActiveNav],
   );
 
-  // Handle initial hash navigation and updates
+  // Handle initial scroll from navigation state
   useEffect(() => {
-    if (location.hash) {
-      const id = location.hash.replace("#", "");
+    if (location.state?.targetId) {
+      const id = location.state.targetId;
       // Small timeout to ensure DOM is ready and lazy components are mounted
       const timer = setTimeout(() => {
         scrollToSection(id);
         if (setActiveNav) setActiveNav(id);
+        // Clear state to prevent scrolling on subsequent renders
+        window.history.replaceState({}, document.title);
       }, 100);
       return () => clearTimeout(timer);
     }
-  }, [location.hash, scrollToSection, setActiveNav]);
+  }, [location.state, scrollToSection, setActiveNav]);
 
   return (
     <motion.header
