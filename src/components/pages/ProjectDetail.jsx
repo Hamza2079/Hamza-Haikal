@@ -35,7 +35,7 @@ export function ProjectDetail() {
             transition={{ duration: 0.5 }}
           >
             <Link
-              to="/#works"
+              to="/projects"
               className="inline-flex items-center gap-2 text-sky-400 hover:text-sky-300 transition-colors mb-8 group"
             >
               <svg

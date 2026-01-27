@@ -5,6 +5,7 @@ import HomePage from "./components/pages/HomePage";
 
 // Lazy load project detail page
 const ProjectDetail = lazy(() => import("./components/pages/ProjectDetail"));
+const ProjectsPage = lazy(() => import("./components/pages/ProjectsPage"));
 
 // Loading fallback component
 const PageLoader = () => (
@@ -20,6 +21,14 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
+      <Route
+        path="/projects"
+        element={
+          <Suspense fallback={<PageLoader />}>
+            <ProjectsPage />
+          </Suspense>
+        }
+      />
       <Route
         path="/project/:slug"
         element={

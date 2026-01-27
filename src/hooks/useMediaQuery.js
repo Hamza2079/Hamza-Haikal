@@ -31,7 +31,7 @@ export function useMediaQuery(query) {
 
 /**
  * Hook to detect mobile devices
- * @returns {boolean} - True if viewport is mobile size (< 768px)
+ * @returns {boolean} 
  */
 export function useIsMobile() {
   return useMediaQuery("(max-width: 768px)");
