@@ -113,7 +113,7 @@ export function About() {
                 {/* Stats Grid */}
                 <div className="grid grid-cols-2 gap-3 w-full pt-6 border-t border-slate-800/50">
                   <AnimatedCounter value={1} label="Years" suffix="+" />
-                  <AnimatedCounter value={3} label="Projects" suffix="+" />
+                  <AnimatedCounter value={9} label="Projects" suffix="+" />
                 </div>
               </div>
             </Profile3D>
