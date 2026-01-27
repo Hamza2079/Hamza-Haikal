@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useCallback, memo } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useState, useCallback, memo, useEffect } from "react";
 
 const navItems = [
   { id: "home", label: "Home", href: "#home" },
@@ -11,34 +12,49 @@ const navItems = [
 
 function NavigationComponent({ activeNav, setActiveNav }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const scrollToSection = useCallback((id) => {
+    const element = document.querySelector(`#${id}`);
+    if (element) {
+      const headerOffset = 80;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition =
+        elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+    }
+  }, []);
 
   const handleNavClick = useCallback(
     (id) => {
-      setActiveNav(id);
-
-      const element = document.querySelector(`#${id}`);
-      if (element) {
-        // Close menu first
-        setMobileMenuOpen(false);
-
-        // Use requestAnimationFrame to ensure scroll happens after menu state updates
-        requestAnimationFrame(() => {
-          const headerOffset = 80;
-          const elementPosition = element.getBoundingClientRect().top;
-          const offsetPosition =
-            elementPosition + window.pageYOffset - headerOffset;
-
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: "smooth",
-          });
-        });
+      if (location.pathname !== "/") {
+        navigate(`/#${id}`);
       } else {
-        setMobileMenuOpen(false);
+        scrollToSection(id);
+        setActiveNav(id);
       }
+      setMobileMenuOpen(false);
     },
-    [setActiveNav],
+    [location.pathname, navigate, scrollToSection, setActiveNav],
   );
+
+  // Handle initial hash navigation and updates
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace("#", "");
+      // Small timeout to ensure DOM is ready and lazy components are mounted
+      const timer = setTimeout(() => {
+        scrollToSection(id);
+        if (setActiveNav) setActiveNav(id);
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [location.hash, scrollToSection, setActiveNav]);
 
   return (
     <motion.header
