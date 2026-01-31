@@ -261,6 +261,49 @@ export const projects = [
     image: new URL("../assets/smart-login-system.webp", import.meta.url).href,
     year: "2025",
   },
+  {
+  id: 10,
+  slug: "admin-dashboard",
+  title: "Admin Dashboard",
+  category: "React",
+  description:
+    "Modern admin dashboard with role-based access control, order management, and responsive mobile-first design.",
+  fullDescription:
+    "Admin Dashboard is a modern, responsive web application built with React, TypeScript, and Tailwind CSS. It provides a complete admin system with authentication, role-based access control (Super Admin, Admin, User), users management, orders tracking, and a fully optimized mobile-first UI. The dashboard supports order creation, status updates, account blocking, revenue statistics, and secure permissions handling using React Query and Context API.",
+  tech: [
+    "React 18",
+    "TypeScript",
+    "Vite",
+    "Tailwind CSS",
+    "React Query",
+    "Axios",
+    "JSON Server",
+    "Lucide React",
+    "Sonner",
+  ],
+  features: [
+    "Role-based authentication (Super Admin, Admin, User)",
+    "Secure login with email and password",
+    "User account activation and blocking",
+    "Orders creation and tracking system",
+    "Order status management (pending, paid, shipped, cancelled)",
+    "Super Admin exclusive permissions",
+    "Revenue statistics for admins",
+    "Mobile-first responsive design",
+    "Card-based layout on mobile",
+    "Table layout on desktop",
+    "Hamburger menu and bottom navigation",
+    "Protected routes and permission system",
+    "No horizontal scroll on mobile",
+  ],
+  challenges:
+    "Implementing a complex role-based permission system and handling different UI behaviors for mobile and desktop views while maintaining clean and scalable state management using React Query and Context API.",
+  demo: "https://admin-dashboard-12.vercel.app/",
+  github: "https://github.com/Hamza2079/Admin-dashboard",
+  image: new URL("../assets/admin-dashboard.webp", import.meta.url).href,
+  year: "2025",
+}
+
 ];
 
 export const services = [
