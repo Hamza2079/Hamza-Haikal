@@ -1,5 +1,6 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, lazy, Suspense } from "react";
+import { Link } from "react-router-dom";
 import {
   useIsMobile,
   usePrefersReducedMotion,
@@ -23,6 +24,21 @@ export function Hero() {
   const heroY = useTransform(scrollYProgress, [0, 0.5], [0, -150]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
   const scaleProgress = useTransform(scrollYProgress, [0, 0.3], [1, 0.95]);
+
+  const scrollToSection = (id) => {
+    const element = document.querySelector(`#${id}`);
+    if (element) {
+      const headerOffset = 80;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition =
+        elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+    }
+  };
 
   return (
     <section
@@ -136,27 +152,28 @@ export function Hero() {
           transition={{ delay: 0.6, duration: 0.6 }}
           className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 pt-2 sm:pt-4 w-full sm:w-auto px-2 sm:px-0"
         >
-          <motion.a
-            href="#works"
-            className="group relative px-6 sm:px-8 py-3 sm:py-4 rounded-full bg-linear-to-r from-sky-500 to-emerald-500 text-white font-semibold text-sm overflow-hidden shadow-lg shadow-sky-500/25 w-full sm:w-auto text-center"
-            whileHover={{
-              scale: 1.05,
-              boxShadow: "0 20px 40px -10px rgba(56, 189, 248, 0.4)",
-            }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <span className="relative z-10">View My Work</span>
-            <motion.div className="absolute inset-0 bg-linear-to-r from-emerald-500 to-sky-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          </motion.a>
+          <Link to="/projects" className="w-full sm:w-auto">
+            <motion.div
+              className="group relative px-6 sm:px-8 py-3 sm:py-4 rounded-full bg-linear-to-r from-sky-500 to-emerald-500 text-white font-semibold text-sm overflow-hidden shadow-lg shadow-sky-500/25 w-full sm:w-auto text-center cursor-pointer"
+              whileHover={{
+                scale: 1.05,
+                boxShadow: "0 20px 40px -10px rgba(56, 189, 248, 0.4)",
+              }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <span className="relative z-10">View My Work</span>
+              <motion.div className="absolute inset-0 bg-linear-to-r from-emerald-500 to-sky-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </motion.div>
+          </Link>
 
-          <motion.a
-            href="#contact"
-            className="px-6 sm:px-8 py-3 sm:py-4 rounded-full border border-slate-700 text-slate-300 font-semibold text-sm hover:border-slate-500 hover:text-white transition-all duration-300 backdrop-blur-sm w-full sm:w-auto text-center"
+          <motion.button
+            onClick={() => scrollToSection("contact")}
+            className="px-6 sm:px-8 py-3 sm:py-4 rounded-full border border-slate-700 text-slate-300 font-semibold text-sm hover:border-slate-500 hover:text-white transition-all duration-300 backdrop-blur-sm w-full sm:w-auto text-center cursor-pointer"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
           >
             Get In Touch
-          </motion.a>
+          </motion.button>
 
           <motion.a
             href="/Hamza_Haikal_Front End Developer_resume (2).pdf"

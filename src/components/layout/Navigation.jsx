@@ -67,9 +67,9 @@ function NavigationComponent({ activeNav, setActiveNav }) {
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6">
         {/* Logo */}
-        <motion.a
-          href="#home"
-          className="flex items-center gap-3 group relative z-50"
+        <motion.button
+          onClick={() => handleNavClick("home")}
+          className="flex items-center gap-3 group relative z-50 cursor-pointer"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
@@ -79,7 +79,7 @@ function NavigationComponent({ activeNav, setActiveNav }) {
           <span className="text-sm font-semibold tracking-tight text-slate-100 group-hover:text-white transition-colors hidden sm:block">
             Hamza Haikal
           </span>
-        </motion.a>
+        </motion.button>
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-4">
@@ -143,14 +143,14 @@ function NavigationComponent({ activeNav, setActiveNav }) {
         </div>
 
         {/* CTA Button (Desktop) */}
-        <motion.a
-          href="#contact"
+        <motion.button
+          onClick={() => handleNavClick("contact")}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-full bg-linear-to-r from-sky-500 to-emerald-500 text-white text-xs font-semibold shadow-lg shadow-sky-500/20"
+          className="hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-full bg-linear-to-r from-sky-500 to-emerald-500 text-white text-xs font-semibold shadow-lg shadow-sky-500/20 cursor-pointer"
         >
           <span>Hire Me</span>
-        </motion.a>
+        </motion.button>
       </nav>
 
       {/* Mobile Menu */}
@@ -182,16 +182,15 @@ function NavigationComponent({ activeNav, setActiveNav }) {
               ))}
 
               {/* Mobile CTA */}
-              <motion.a
+              <motion.button
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: navItems.length * 0.1 }}
-                href="#contact"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block w-full text-center px-4 py-3 mt-4 rounded-xl bg-linear-to-r from-sky-500 to-emerald-500 text-white font-semibold shadow-lg shadow-sky-500/20"
+                onClick={() => handleNavClick("contact")}
+                className="block w-full text-center px-4 py-3 mt-4 rounded-xl bg-linear-to-r from-sky-500 to-emerald-500 text-white font-semibold shadow-lg shadow-sky-500/20 cursor-pointer"
               >
                 Hire Me
-              </motion.a>
+              </motion.button>
             </div>
           </motion.div>
         )}
