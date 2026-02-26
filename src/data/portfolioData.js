@@ -302,6 +302,110 @@ export const projects = [
   github: "https://github.com/Hamza2079/Admin-dashboard",
   image: new URL("../assets/admin-dashboard.webp", import.meta.url).href,
   year: "2025",
+},
+{
+  id: 11,
+  slug: "mazoun-riyadh-landing",
+  title: "مأذون شرعي في الرياض",
+  category: "Landing Page",
+  description:
+    "Highly optimized Arabic landing page for a wedding officiant in Riyadh with premium design, SEO optimization, and advanced performance enhancements.",
+  fullDescription:
+    "مأذون شرعي في الرياض is a premium Arabic RTL landing page built using local Tailwind CSS and vanilla JavaScript. The project focuses heavily on performance, accessibility (WCAG 2.1 AA compliance), SEO optimization, and smooth UI animations. It features Islamic-inspired visuals, structured data for search engines, advanced animation effects, lazy loading, optimized font rendering, and a fully responsive mobile-first design without horizontal scrolling.",
+  tech: [
+    "HTML5",
+    "Tailwind CSS (Local Build)",
+    "JavaScript (Vanilla)",
+    "Font Awesome",
+    "Google Fonts (Tajawal, Amiri)",
+    "Intersection Observer API",
+  ],
+  features: [
+    "Premium Arabic RTL design",
+    "Fully responsive (mobile-first)",
+    "WCAG 2.1 AA accessibility compliance",
+    "SEO optimized with Open Graph & Structured Data",
+    "Lazy loading images",
+    "Scroll reveal animations",
+    "Particle animated background",
+    "Ripple button effects",
+    "Parallax scrolling",
+    "Counter animations",
+    "No horizontal scroll on mobile",
+    "Optimized local Tailwind build (no CDN)",
+  ],
+  challenges:
+    "Balancing heavy visual animations and particle effects while maintaining excellent performance scores and accessibility compliance across all devices.",
+  demo: "https://peachpuff-llama-153743.hostingersite.com/",
+  github: "https://github.com/Hamza2079/Mazoun-Riyadh",
+  image: new URL("../assets/alm2zonya.webp", import.meta.url).href,
+  year: "2026",
+},{
+  id: 12,
+  slug: "dar-alraha-bedroom-landing",
+  title: "دار الراحة - Saudi Dream Home",
+  category: "Landing Page",
+  description:
+    "Luxury Arabic landing page for showcasing and selling ready-made bedrooms in Riyadh with interactive gallery and WhatsApp integration.",
+  fullDescription:
+    "Dar Alraha is a luxury RTL landing page designed to showcase premium bedroom furniture in Riyadh. The project includes an interactive lightbox gallery, background hero video, WhatsApp direct integration, SEO optimization, structured data, and smooth scroll animations. Built using Tailwind CSS and vanilla JavaScript, the website focuses on performance, clean UI, accessibility, and conversion-driven design.",
+  tech: [
+    "HTML5",
+    "Tailwind CSS",
+    "JavaScript (Vanilla)",
+    "Google Fonts (Cairo)",
+    "Intersection Observer",
+  ],
+  features: [
+    "Luxury modern UI design",
+    "Fully responsive layout",
+    "Interactive image lightbox gallery",
+    "Background hero video",
+    "Floating WhatsApp button",
+    "Contact form with WhatsApp redirect",
+    "Scroll animations",
+    "SEO optimized meta tags",
+    "Structured Data (Schema.org)",
+    "Lazy loading images & videos",
+  ],
+  challenges:
+    "Creating a visually rich experience with video backgrounds and image galleries while keeping load times optimized and maintaining smooth performance on mobile devices.",
+  demo: "https://rest-home-sa.com/",
+  github: "https://github.com/Hamza2079/Dar-Alraha",
+  image: new URL("../assets/dar-alraha.webp", import.meta.url).href,
+  year: "2026",
+},{
+  id: 13,
+  slug: "istisharat-waeia-consultation",
+  title: "استشارات واعية",
+  category: "Landing Page",
+  description:
+    "Professional Arabic consultation website for family and educational consulting services with WhatsApp integration and optimized performance.",
+  fullDescription:
+    "Istisharat Waeia is a professional Arabic consultation website built with local Tailwind CSS and vanilla JavaScript. The platform focuses on clarity, trust-building UI, RTL support, SEO optimization, fast loading performance, and direct WhatsApp integration. It includes animated sections, structured semantic HTML, accessibility considerations, and a fully responsive design optimized for all screen sizes.",
+  tech: [
+    "HTML5",
+    "Tailwind CSS (Local)",
+    "JavaScript (Vanilla)",
+    "Google Fonts (Cairo, Tajawal)",
+  ],
+  features: [
+    "Modern RTL Arabic design",
+    "Responsive across all devices",
+    "SEO optimized structure",
+    "WhatsApp contact integration",
+    "Floating WhatsApp button",
+    "Animated sections on scroll",
+    "Video introduction section",
+    "Accessible semantic markup",
+    "Optimized local CSS build",
+  ],
+  challenges:
+    "Designing a calm, trust-oriented UI that reduces cognitive load while maintaining strong visual hierarchy and optimized loading performance.",
+  demo: "https://faisal1-sa.com/",
+  github: "https://github.com/Hamza2079/Istisharat-Waeia",
+  image: new URL("../assets/istisharat-waeia.webp", import.meta.url).href,
+  year: "2026",
 }
 
 ];
