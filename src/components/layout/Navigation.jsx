@@ -21,7 +21,7 @@ function NavigationComponent({ activeNav, setActiveNav }) {
       const headerOffset = 80;
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition =
-        elementPosition + window.pageYOffset - headerOffset;
+        elementPosition + window.scrollY - headerOffset;
 
       window.scrollTo({
         top: offsetPosition,
@@ -33,14 +33,23 @@ function NavigationComponent({ activeNav, setActiveNav }) {
   const handleNavClick = useCallback(
     (id) => {
       if (location.pathname !== "/") {
+        setMobileMenuOpen(false);
         navigate("/", { state: { targetId: id } });
       } else {
-        scrollToSection(id);
-        if (setActiveNav) setActiveNav(id);
+        // Close mobile menu first, then scroll after animation completes
+        if (mobileMenuOpen) {
+          setMobileMenuOpen(false);
+          setTimeout(() => {
+            scrollToSection(id);
+            if (setActiveNav) setActiveNav(id);
+          }, 350);
+        } else {
+          scrollToSection(id);
+          if (setActiveNav) setActiveNav(id);
+        }
       }
-      setMobileMenuOpen(false);
     },
-    [location.pathname, navigate, scrollToSection, setActiveNav],
+    [location.pathname, navigate, scrollToSection, setActiveNav, mobileMenuOpen],
   );
 
   // Handle initial scroll from navigation state

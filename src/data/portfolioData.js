@@ -118,7 +118,7 @@ export const projects = [
     id: 5,
     slug: "daniels-portfolio",
     title: "Daniels Portfolio",
-    category: "Landing Pages",
+    category: "Landing Pagess",
     description:
       "Sleek and professional personal portfolio template with smooth animations and a clean, modern layout.",
     fullDescription:
@@ -307,7 +307,7 @@ export const projects = [
   id: 11,
   slug: "mazoun-riyadh-landing",
   title: "مأذون شرعي في الرياض",
-  category: "Landing Page",
+  category: "Landing Pages",
   description:
     "Highly optimized Arabic landing page for a wedding officiant in Riyadh with premium design, SEO optimization, and advanced performance enhancements.",
   fullDescription:
@@ -378,7 +378,7 @@ export const projects = [
   id: 13,
   slug: "istisharat-waeia-consultation",
   title: "استشارات واعية",
-  category: "Landing Page",
+  category: "Landing Pages",
   description:
     "Professional Arabic consultation website for family and educational consulting services with WhatsApp integration and optimized performance.",
   fullDescription:
@@ -444,7 +444,7 @@ export const experiences = [
     type: "Freelance",
     period: "2025 — Present",
     description:
-      "Providing landing page and website services, focusing on modern UI, full responsiveness, and SEO basics. Delivering clean and smooth user experiences with professional layouts and animations.",
+      "Providing landing pages and website services, focusing on modern UI, full responsiveness, and SEO basics. Delivering clean and smooth user experiences with professional layouts and animations.",
   },
   {
     company: "Computer Science Student",
