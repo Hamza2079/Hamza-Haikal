@@ -1,163 +1,262 @@
-import {
-  motion,
-  useScroll,
-  useTransform,
-  useSpring,
-  useReducedMotion,
-} from "framer-motion";
-import { useRef } from "react";
-import { Link } from "react-router-dom";
-import { ProjectCard } from "../ui/ProjectCard";
+import { motion, AnimatePresence, useMotionValue } from "framer-motion";
+import { useRef, useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { CharReveal, TextReveal } from "../ui/TextReveal";
+import { useIsMobile } from "../../hooks/useMediaQuery";
 import { projects } from "../../data/portfolioData";
 
+const featured = projects.filter(p => p.featured);
+const N = featured.length;
+
 export function Works() {
-  const sectionRef = useRef(null);
-  const shouldReduceMotion = useReducedMotion();
+  const outerRef = useRef(null);
+  const navigate = useNavigate();
+  const [activeIdx, setActiveIdx] = useState(0);
+  const progress = useMotionValue(0);
+  const isMobile = useIsMobile();
 
-  // Show only first 4 projects
-  const displayedProjects = projects.slice(0, 4);
+  useEffect(() => {
+    let ticking = false;
+    const update = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const el = outerRef.current;
+        if (!el) { ticking = false; return; }
+        const { top } = el.getBoundingClientRect();
+        const scrollable = el.offsetHeight - window.innerHeight;
+        if (scrollable <= 0) { ticking = false; return; }
+        const p = Math.max(0, Math.min(1, -top / scrollable));
+        progress.set(p);
+        setActiveIdx(Math.min(Math.floor(p * N), N - 1));
+        ticking = false;
+      });
+    };
+    window.addEventListener("scroll", update, { passive: true });
+    update();
+    return () => window.removeEventListener("scroll", update);
+  }, [progress, N]);
 
-  // Scroll progress for the section
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-
-  // Smooth spring animation for progress bar
-  const scaleY = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
-
-  // Container variants for stagger animation
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: shouldReduceMotion ? 0 : 0.15,
-        delayChildren: shouldReduceMotion ? 0 : 0.2,
-      },
-    },
-  };
-
-  // Card variants with blur effect
-  const cardVariants = {
-    hidden: {
-      opacity: 0,
-      y: shouldReduceMotion ? 0 : 30,
-      filter: shouldReduceMotion ? "blur(0px)" : "blur(10px)",
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      filter: "blur(0px)",
-      transition: {
-        duration: 0.6,
-        ease: [0.22, 1, 0.36, 1],
-      },
-    },
-  };
+  const project = featured[activeIdx];
 
   return (
-    <section
-      ref={sectionRef}
-      id="works"
-      className="relative py-24 px-4 sm:px-6 overflow-hidden"
-    >
-      {/* Background Elements */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-linear-to-b from-sky-500/5 to-transparent rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-0 w-[600px] h-[300px] bg-linear-to-l from-emerald-500/5 to-transparent rounded-full blur-3xl" />
-      </div>
+    <section id="works" style={{ background: "var(--bg)" }}>
+      {/* Outer: tall container creates scroll space — N full screens */}
+      <div ref={outerRef} style={{ height: `${N * 100}vh`, position: "relative" }}>
 
-      {/* Section Header */}
-      <div className="max-w-7xl mx-auto mb-16 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center"
-        >
-          <motion.span
-            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 10 }}
+        {/* Sticky: pins to viewport, shows full content while outer scrolls */}
+        <div style={{
+          position: "sticky",
+          top: 0,
+          height: "100vh",
+          overflow: "hidden",
+          background: "var(--bg)",
+          display: "flex",
+          flexDirection: "column",
+          padding: "0 24px",
+        }}>
+          {/* ── Title stays pinned ── */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-sky-400 text-sm font-semibold uppercase tracking-wider"
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            style={{ paddingTop: isMobile ? 48 : 88, paddingBottom: 24, maxWidth: 1280, width: "100%", margin: "0 auto", flexShrink: 0 }}
           >
-            Portfolio
-          </motion.span>
-          <motion.h2
-            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-bold mt-2 bg-clip-text text-transparent bg-linear-to-r from-slate-100 via-slate-200 to-slate-400"
-          >
-            Featured Projects
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-slate-400 text-lg mt-4 max-w-2xl mx-auto"
-          >
-            A selection of my recent work in web development and modern UI
-            experiences.
-          </motion.p>
-        </motion.div>
-      </div>
+            <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 24, flexWrap: isMobile ? "wrap" : "nowrap" }}>
+              <div>
+                <CharReveal text="Selected Work" inView stagger={0.06}
+                  className="text-[11px] font-semibold uppercase tracking-[0.2em] block mb-2"
+                  style={{ color: "var(--accent)" }} />
+                <h2 style={{ fontSize: "clamp(2.2rem,5vw,4rem)", fontWeight: 900, letterSpacing: "-0.02em", lineHeight: 1, color: "var(--text-primary)", margin: 0 }}>
+                  <CharReveal text="Featured" inView stagger={0.04} />{' '}
+                  <span className="text-gradient-violet"><CharReveal text="Projects." inView stagger={0.04} delay={0.2} /></span>
+                </h2>
+              </div>
 
-      {/* Projects Grid with Stagger Animation */}
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
-        className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 relative z-10"
-      >
-        {displayedProjects.map((project) => (
-          <ProjectCard
-            key={project.id}
-            project={project}
-            variants={cardVariants}
-          />
-        ))}
-      </motion.div>
+              {/* Dots + counter */}
+              <div style={{ display: "flex", alignItems: "center", gap: 16, flexShrink: 0 }}>
+                <div style={{ display: "flex", gap: 8 }}>
+                  {featured.map((_, i) => (
+                    <button key={i}
+                      onClick={() => {
+                        const el = outerRef.current; if (!el) return;
+                        window.scrollTo({ top: el.offsetTop + (i / N) * el.offsetHeight, behavior: "smooth" });
+                      }}
+                      style={{
+                        width: i === activeIdx ? 24 : 8, height: 8, borderRadius: 4,
+                        border: "none", padding: 0, cursor: "pointer",
+                        background: i === activeIdx ? "var(--accent)" : "var(--border-strong)",
+                        transition: "all 0.35s cubic-bezier(0.22,1,0.36,1)",
+                      }}
+                    />
+                  ))}
+                </div>
+                <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text-muted)", fontVariantNumeric: "tabular-nums" }}>
+                  {String(activeIdx + 1).padStart(2, "0")} / {String(N).padStart(2, "0")}
+                </span>
+              </div>
+            </div>
+            <div style={{ height: 1, background: "var(--border)", marginTop: 20 }} />
+          </motion.div>
 
-      {/* See More Button */}
-      <div className="flex justify-center mt-12 relative z-10">
-        <Link to="/projects">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="group relative flex items-center gap-2 px-8 py-3 rounded-full bg-slate-900 border border-slate-700 hover:border-sky-500/50 hover:bg-slate-800 transition-all duration-300"
+          {/* ── Project content: crossfades ── */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+            style={{ flex: 1, maxWidth: 1280, width: "100%", margin: "0 auto", minHeight: 0, position: "relative" }}
           >
-            <span className="text-slate-300 group-hover:text-white font-medium">
-              Explore All Projects
-            </span>
-            <span className="w-8 h-8 rounded-full bg-sky-500/10 flex items-center justify-center group-hover:bg-sky-500 transition-colors duration-300">
-              <svg
-                className="w-4 h-4 text-sky-400 group-hover:text-white transition-colors duration-300"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+            <AnimatePresence mode="wait">
+              <motion.div key={activeIdx}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
+                style={{
+                  position: "absolute", inset: 0,
+                  display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+                  gap: isMobile ? 24 : 48, alignItems: "center",
+                }}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17 8l4 4m0 0l-4 4m4-4H3"
-                />
-              </svg>
-            </span>
-          </motion.button>
-        </Link>
+                {/* Image */}
+                <div style={{ position: "relative", borderRadius: 16, overflow: "hidden", aspectRatio: "16/10", cursor: "pointer" }}
+                  onClick={() => navigate(`/project/${project.slug}`)}>
+                  <div style={{
+                    width: "100%", height: "100%",
+                    backgroundImage: `url(${project.image})`,
+                    backgroundSize: "cover", backgroundPosition: "center",
+                    transition: "transform 0.6s",
+                  }} />
+                  <div style={{ position: "absolute", inset: 0, borderRadius: 16, background: "rgba(9,9,11,0.3)" }} />
+
+                  {/* Category */}
+                  <div style={{ position: "absolute", top: 14, left: 14 }}>
+                    <span style={{ fontSize: 10, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.15em",
+                      padding: "6px 12px", borderRadius: 99, background: "rgba(9,9,11,0.8)",
+                      color: "#fff" }}>
+                      {project.category}
+                    </span>
+                  </div>
+
+                  {/* Always-visible CTA buttons */}
+                  <div style={{ position: "absolute", bottom: 14, left: 14, right: 14, display: "flex", gap: 10 }}>
+                    <a href={project.demo} target="_blank" rel="noreferrer"
+                      onClick={e => e.stopPropagation()}
+                      style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center",
+                        padding: "10px 0", borderRadius: 99, fontSize: 13, fontWeight: 700, color: "#fff",
+                        background: "var(--accent)", boxShadow: "0 4px 20px rgba(139,92,246,0.5)", textDecoration: "none" }}>
+                      <CharReveal text="↗ Live Demo" inView={false} delay={0.2} stagger={0.06} />
+                    </a>
+                    <a href={project.github} target="_blank" rel="noreferrer"
+                      onClick={e => e.stopPropagation()}
+                      style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center",
+                        padding: "10px 0", borderRadius: 99, fontSize: 13, fontWeight: 700, color: "#fff",
+                        background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.3)",
+                        backdropFilter: "blur(8px)", textDecoration: "none" }}>
+                      <CharReveal text="GitHub" inView={false} delay={0.3} stagger={0.06} />
+                    </a>
+                  </div>
+                </div>
+
+                {/* Text */}
+                <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                    <CharReveal text={`Project ${String(activeIdx + 1).padStart(2, "0")}`} inView={false} stagger={0.04}
+                      className="text-[11px] font-semibold uppercase tracking-[0.2em]"
+                      style={{ color: "var(--accent)" }} />
+                    <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
+                    <span style={{ fontSize: 11, color: "var(--text-muted)" }}>{project.year}</span>
+                  </div>
+
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+                    <h3 style={{ fontSize: "clamp(1.6rem,3vw,2.4rem)", fontWeight: 900, letterSpacing: "-0.02em", lineHeight: 1.05,
+                      color: "var(--text-primary)", margin: 0, cursor: "pointer" }}
+                      onClick={() => navigate(`/project/${project.slug}`)}>
+                      <CharReveal text={project.title} inView={false} stagger={0.04} delay={0.15} />
+                    </h3>
+                    <button onClick={() => navigate(`/project/${project.slug}`)}
+                      style={{ padding: "6px 14px", borderRadius: 99, fontSize: 11, fontWeight: 600,
+                        background: "var(--accent)", color: "#fff", border: "none", cursor: "pointer", whiteSpace: "nowrap" }}>
+                      Case Study →
+                    </button>
+                  </div>
+
+                  <TextReveal text={project.description} inView={false} delay={0.25} stagger={0.035}
+                    className="text-[14px] leading-[1.85]"
+                    style={{ color: "var(--text-secondary)", margin: 0, maxWidth: isMobile ? "none" : 420 }} />
+
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                    {project.tech.slice(0, 5).map(t => (
+                      <span key={t} style={{ fontSize: 12, padding: "6px 12px", borderRadius: 99,
+                        border: "1px solid var(--border)", background: "var(--accent-subtle)", color: "var(--text-secondary)" }}>
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+
+                  {!isMobile && (
+                    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 12 }}>
+                      <a href={project.demo} target="_blank" rel="noreferrer"
+                        style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "12px 24px",
+                          borderRadius: 99, fontSize: 13, fontWeight: 700, color: "#fff",
+                          background: "var(--accent)", boxShadow: "0 4px 20px var(--accent-glow)", textDecoration: "none" }}>
+                        ↗ Live Demo
+                      </a>
+                      <a href={project.github} target="_blank" rel="noreferrer"
+                        style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "12px 20px",
+                          borderRadius: 99, fontSize: 13, fontWeight: 600,
+                          border: "1px solid var(--border-strong)", color: "var(--text-secondary)",
+                          background: "var(--bg-surface)", textDecoration: "none" }}>
+                        GitHub
+                      </a>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </motion.div>
+
+          {/* Scroll hint */}
+          {activeIdx < N - 1 && (
+            <div style={{ paddingBottom: 20, display: "flex", flexDirection: "column", alignItems: "center", gap: 6, opacity: 0.45, flexShrink: 0 }}>
+              <span style={{ fontSize: 10, textTransform: "uppercase", letterSpacing: "0.2em", color: "var(--text-muted)" }}>scroll for next</span>
+              <motion.svg animate={{ y: [0, 5, 0] }} transition={{ duration: 1.4, repeat: Infinity }}
+                style={{ width: 14, height: 14, color: "var(--text-muted)" }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
+              </motion.svg>
+            </div>
+          )}
+        </div>
       </div>
+
+      {/* All-projects CTA in normal flow after */}
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        style={{ padding: isMobile ? "32px 24px" : "64px 24px", background: "var(--bg)" }}
+      >
+        <div style={{ maxWidth: 1280, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <CharReveal text={`${projects.length} total projects`} inView delay={0.15} stagger={0.05}
+            className="text-[13px]"
+            style={{ color: "var(--text-muted)" }} />
+          <Link to="/projects" style={{ textDecoration: "none" }}>
+            <motion.div whileHover={{ x: 4 }}
+              style={{ display: "inline-flex", alignItems: "center", gap: 12, padding: "12px 24px",
+                borderRadius: 99, fontSize: 14, fontWeight: 700,
+                background: "var(--accent)", color: "#fff",
+                boxShadow: "0 4px 20px var(--accent-glow)", cursor: "pointer" }}>
+              View all work
+              <svg style={{ width: 16, height: 16 }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </motion.div>
+          </Link>
+        </div>
+      </motion.div>
     </section>
   );
 }

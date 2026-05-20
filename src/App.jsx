@@ -3,16 +3,26 @@ import { Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import HomePage from "./components/pages/HomePage";
 
-// Lazy load project detail page
 const ProjectDetail = lazy(() => import("./components/pages/ProjectDetail"));
-const ProjectsPage = lazy(() => import("./components/pages/ProjectsPage"));
+const ProjectsPage  = lazy(() => import("./components/pages/ProjectsPage"));
 
-// Loading fallback component
 const PageLoader = () => (
-  <div className="min-h-screen flex items-center justify-center bg-slate-950">
-    <div className="flex flex-col items-center gap-4">
-      <div className="w-12 h-12 border-4 border-sky-500/20 border-t-sky-500 rounded-full animate-spin" />
-      <p className="text-slate-400 text-sm">Loading...</p>
+  <div
+    className="min-h-screen flex items-center justify-center"
+    style={{ background: "#09090B" }}
+  >
+    <div className="flex flex-col items-center gap-6">
+      {/* Minimal violet loader */}
+      <div className="flex gap-1.5">
+        {[0, 1, 2].map((i) => (
+          <div
+            key={i}
+            className="w-1.5 h-1.5 rounded-full bg-[#8B5CF6]/60 animate-pulse"
+            style={{ animationDelay: `${i * 0.2}s` }}
+          />
+        ))}
+      </div>
+      <p className="text-[11px] text-white/20 uppercase tracking-widest font-medium">Loading</p>
     </div>
   </div>
 );

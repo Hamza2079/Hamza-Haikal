@@ -1,19 +1,8 @@
-/* Extra micro-detail tweaks that complement Tailwind classes */
-
+/* Root layout */
 #root {
   width: 100%;
 }
 
-main {
-  scroll-behavior: smooth;
-}
-
 section {
   scroll-margin-top: 80px;
-}
-
-@media (max-width: 640px) {
-  header nav {
-    padding-inline: 1rem;
-  }
 }

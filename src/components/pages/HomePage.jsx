@@ -1,20 +1,26 @@
 import { useState, useEffect, lazy, Suspense, useRef } from "react";
-import { Navigation } from "../layout/Navigation";
-import { Hero } from "../sections/Hero";
-import { About } from "../sections/About";
+import { Navigation }            from "../layout/Navigation";
+import { Hero }                  from "../sections/Hero";
+import { About }                 from "../sections/About";
 import { ScrollProgressIndicator } from "../ui/ScrollProgressIndicator";
+import { useIsMobile } from "../../hooks/useMediaQuery";
+import Lenis from "lenis";
 
-// Lazy load heavy components
-const Works = lazy(() => import("../sections/Works"));
+// Lazy load heavier sections
+const Works      = lazy(() => import("../sections/Works"));
 const Experience = lazy(() => import("../sections/Experience"));
-const Contact = lazy(() => import("../sections/Contact"));
+const Contact    = lazy(() => import("../sections/Contact"));
 
-// Loading fallback component
 const SectionLoader = () => (
-  <div className="min-h-screen flex items-center justify-center">
-    <div className="flex flex-col items-center gap-4">
-      <div className="w-12 h-12 border-4 border-sky-500/20 border-t-sky-500 rounded-full animate-spin" />
-      <p className="text-slate-400 text-sm">Loading...</p>
+  <div className="h-32 flex items-center justify-center">
+    <div className="flex gap-1.5">
+      {[0, 1, 2].map((i) => (
+        <div
+          key={i}
+          className="w-1.5 h-1.5 rounded-full bg-[#8B5CF6]/40 animate-pulse"
+          style={{ animationDelay: `${i * 0.15}s` }}
+        />
+      ))}
     </div>
   </div>
 );
@@ -22,7 +28,38 @@ const SectionLoader = () => (
 function HomePage() {
   const [activeNav, setActiveNav] = useState("home");
   const observerRef = useRef(null);
+  const lenisRef    = useRef(null);
+  const isMobile = useIsMobile();
 
+  // ── Lenis smooth scroll (disabled on mobile for perf) ──
+  useEffect(() => {
+    if (isMobile) return;
+
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: "vertical",
+      smoothWheel: true,
+      wrapper: window,
+      content: document.documentElement,
+    });
+    lenisRef.current = lenis;
+    window.__lenis = lenis;
+
+    const raf = (time) => {
+      lenis.raf(time);
+      window.dispatchEvent(new Event("scroll"));
+      requestAnimationFrame(raf);
+    };
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+      delete window.__lenis;
+    };
+  }, [isMobile]);
+
+  // ── Section intersection observer ──
   useEffect(() => {
     const observerOptions = {
       root: null,
@@ -30,68 +67,39 @@ function HomePage() {
       threshold: 0,
     };
 
-    const observerCallback = (entries) => {
+    observerRef.current = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setActiveNav(entry.target.id);
-        }
+        if (entry.isIntersecting) setActiveNav(entry.target.id);
       });
+    }, observerOptions);
+
+    const observeAll = () => {
+      document.querySelectorAll("section[id]").forEach((s) =>
+        observerRef.current.observe(s)
+      );
     };
 
-    // Create IntersectionObserver
-    observerRef.current = new IntersectionObserver(
-      observerCallback,
-      observerOptions,
-    );
+    observeAll();
 
-    // Function to observe all sections
-    const observeAllSections = () => {
-      const sections = document.querySelectorAll("section[id]");
-      sections.forEach((section) => {
-        observerRef.current.observe(section);
-      });
-    };
-
-    // Initial observation
-    observeAllSections();
-
-    // MutationObserver to watch for lazy-loaded sections
-    const mutationObserver = new MutationObserver(() => {
-      // Re-observe all sections when DOM changes (lazy sections load)
-      observeAllSections();
-    });
-
-    // Observe the main element for child additions
-    const mainElement = document.querySelector("main");
-    if (mainElement) {
-      mutationObserver.observe(mainElement, {
-        childList: true,
-        subtree: true,
-      });
-    }
+    const mutationObs = new MutationObserver(observeAll);
+    const main = document.querySelector("main");
+    if (main) mutationObs.observe(main, { childList: true, subtree: true });
 
     return () => {
-      // Cleanup
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-      mutationObserver.disconnect();
+      observerRef.current?.disconnect();
+      mutationObs.disconnect();
     };
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden">
-      {/* Navigation */}
+    <div className="min-h-screen" style={{ background: "var(--bg)", color: "var(--text-primary)" }}>
       <Navigation activeNav={activeNav} setActiveNav={setActiveNav} />
-
-      {/* Global Scroll Progress Indicator */}
       <ScrollProgressIndicator />
 
       <main className="relative">
         <Hero />
         <About />
 
-        {/* Lazy loaded sections */}
         <Suspense fallback={<SectionLoader />}>
           <Works />
         </Suspense>
