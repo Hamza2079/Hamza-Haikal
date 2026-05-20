@@ -434,7 +434,7 @@ export const projects = [
   demo: "https://e7gzly.vercel.app/",
   github: "https://github.com/Hamza2079/e7gzly",
   image: new URL(
-    "../assets/e7gzly.webp",
+    "../assets/E7gzly.webp",
     import.meta.url,
   ).href,
   year: "2026",
