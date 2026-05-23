@@ -90,6 +90,7 @@ export function About() {
                   alt="Hamza Haikal"
                   loading="lazy"
                   decoding="async"
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   className="w-full h-full object-cover"
                 />
               </motion.div>

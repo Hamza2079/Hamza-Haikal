@@ -358,6 +358,7 @@ export function Hero() {
                   fetchpriority="high"
                   width={320}
                   height={320}
+                  sizes="(max-width: 1024px) 288px, 320px"
                   className="w-full h-full object-cover"
                 />
                 {/* Subtle tint overlay */}

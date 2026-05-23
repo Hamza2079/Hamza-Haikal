@@ -1,5 +1,5 @@
-import { motion, AnimatePresence, useMotionValue } from "framer-motion";
-import { useRef, useState, useEffect } from "react";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
+import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CharReveal, TextReveal } from "../ui/TextReveal";
 import { useIsMobile } from "../../hooks/useMediaQuery";
@@ -12,30 +12,16 @@ export function Works() {
   const outerRef = useRef(null);
   const navigate = useNavigate();
   const [activeIdx, setActiveIdx] = useState(0);
-  const progress = useMotionValue(0);
   const isMobile = useIsMobile();
 
-  useEffect(() => {
-    let ticking = false;
-    const update = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        const el = outerRef.current;
-        if (!el) { ticking = false; return; }
-        const { top } = el.getBoundingClientRect();
-        const scrollable = el.offsetHeight - window.innerHeight;
-        if (scrollable <= 0) { ticking = false; return; }
-        const p = Math.max(0, Math.min(1, -top / scrollable));
-        progress.set(p);
-        setActiveIdx(Math.min(Math.floor(p * N), N - 1));
-        ticking = false;
-      });
-    };
-    window.addEventListener("scroll", update, { passive: true });
-    update();
-    return () => window.removeEventListener("scroll", update);
-  }, [progress, N]);
+  const { scrollYProgress } = useScroll({
+    target: outerRef,
+    offset: ["start start", "end end"]
+  });
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    setActiveIdx(Math.min(Math.floor(latest * N), N - 1));
+  });
 
   const project = featured[activeIdx];
 
@@ -70,7 +56,7 @@ export function Works() {
                   style={{ color: "var(--accent)" }} />
                 <h2 style={{ fontSize: "clamp(2.2rem,5vw,4rem)", fontWeight: 900, letterSpacing: "-0.02em", lineHeight: 1, color: "var(--text-primary)", margin: 0 }}>
                   <CharReveal text="Featured" inView stagger={0.04} />{' '}
-                  <span className="text-gradient-violet"><CharReveal text="Projects." inView stagger={0.035} delay={0.2} /></span>
+                  <CharReveal text="Projects." inView delay={0.2} stagger={0.035} className="text-gradient-violet" />
                 </h2>
               </div>
 

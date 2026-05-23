@@ -7,17 +7,16 @@ function usePrefersReduced() {
 }
 
 /**
- * Shared hook: only marks the element as "ready to animate" after it has been
- * continuously in view for `settleMs` milliseconds.  This prevents the
- * once-fired animation from completing instantly in sticky / scroll-hijacked
- * containers where the element is technically "in view" from mount.
+ * Only marks the element as "ready to animate" after it has been
+ * continuously in view for `settleMs` ms.  Prevents a once-fired animation
+ * from completing instantly inside sticky / scroll-hijacked containers.
  */
-function useSettledInView(ref, { once = true, amount = 0.2, settleMs = 80 } = {}) {
+function useSettledInView(ref, { once = true, amount = 0.15, settleMs = 80 } = {}) {
   const isInView = useInView(ref, { once: false, amount });
   const [settled, setSettled] = useState(false);
 
   useEffect(() => {
-    if (settled && once) return;             // already fired, nothing to do
+    if (settled && once) return;
     if (!isInView) { setSettled(false); return; }
 
     const id = setTimeout(() => setSettled(true), settleMs);
@@ -30,6 +29,7 @@ function useSettledInView(ref, { once = true, amount = 0.2, settleMs = 80 } = {}
 export function TextReveal({
   text,
   className = "",
+  textClass = "",
   delay = 0,
   stagger = 0.06,
   duration = 0.75,
@@ -43,17 +43,17 @@ export function TextReveal({
   const ref = useRef(null);
   const settled = useSettledInView(ref, { once, amount: 0.15 });
 
-  /* On mobile or reduced motion, fall back to a simple fade-in */
+  /* Reduced-motion or mobile: plain fade, no stagger */
   if (prefersReduced || isMobile) {
     const motionProps = inView
-      ? { initial: { opacity: 0 }, whileInView: { opacity: 1 }, viewport: { once, amount: 0.15 } }
+      ? { initial: { opacity: 0 }, animate: settled ? { opacity: 1 } : { opacity: 0 } }
       : { initial: { opacity: 0 }, animate: { opacity: 1 } };
     return (
       <motion.span
         ref={ref}
         {...motionProps}
         transition={{ duration: 0.5, delay }}
-        className={className}
+        className={`${className} ${textClass}`}
         style={style}
       >
         {text}
@@ -79,8 +79,6 @@ export function TextReveal({
     },
   };
 
-  // For inView mode, we control animation via the settled flag instead of
-  // Framer's whileInView to avoid premature triggers in sticky contexts.
   const animateState = inView ? (settled ? "visible" : "hidden") : undefined;
 
   const motionProps = inView
@@ -100,6 +98,7 @@ export function TextReveal({
           <motion.span
             variants={wordVariants}
             style={{ display: "inline-block" }}
+            className={textClass}
           >
             {word}
           </motion.span>
@@ -112,6 +111,7 @@ export function TextReveal({
 export function CharReveal({
   text,
   className = "",
+  textClass = "",
   delay = 0,
   stagger = 0.03,
   duration = 0.5,
@@ -124,17 +124,17 @@ export function CharReveal({
   const ref = useRef(null);
   const settled = useSettledInView(ref, { once, amount: 0.15 });
 
-  /* On mobile or reduced motion, fall back to a simple fade-in */
+  /* Reduced-motion or mobile: plain fade, no stagger */
   if (prefersReduced || isMobile) {
     const motionProps = inView
-      ? { initial: { opacity: 0 }, whileInView: { opacity: 1 }, viewport: { once, amount: 0.15 } }
+      ? { initial: { opacity: 0 }, animate: settled ? { opacity: 1 } : { opacity: 0 } }
       : { initial: { opacity: 0 }, animate: { opacity: 1 } };
     return (
       <motion.span
         ref={ref}
         {...motionProps}
         transition={{ duration: 0.5, delay }}
-        className={className}
+        className={`${className} ${textClass}`}
         style={style}
       >
         {text}
@@ -160,7 +160,6 @@ export function CharReveal({
     },
   };
 
-  // For inView mode, use settled flag to avoid premature triggers
   const animateState = inView ? (settled ? "visible" : "hidden") : undefined;
 
   const motionProps = inView
@@ -172,7 +171,7 @@ export function CharReveal({
       ref={ref}
       variants={containerVariants}
       {...motionProps}
-      style={{ display: "inline-flex", flexWrap: "wrap" }}
+      style={{ display: "inline-flex", flexWrap: "wrap", transform: "translateZ(0)", ...style }}
       className={className}
     >
       {chars.map((char, i) => (
@@ -180,6 +179,7 @@ export function CharReveal({
           <motion.span
             variants={charVariants}
             style={{ display: "inline-block" }}
+            className={textClass}
           >
             {char === " " ? "\u00A0" : char}
           </motion.span>

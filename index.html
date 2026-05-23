@@ -11,9 +11,11 @@
     <meta property="og:description" content="Frontend Engineer crafting smooth, immersive digital experiences." />
     <meta property="og:type" content="website" />
     <title>Hamza Haikal — Frontend Engineer</title>
-    <!-- Satoshi Font via Fontshare -->
+    <!-- Satoshi Font via Fontshare (non-render-blocking) -->
     <link rel="preconnect" href="https://api.fontshare.com" />
-    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+    <noscript><link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap" rel="stylesheet" /></noscript>
 
     <!-- Preconnect to analytics domains for faster loading -->
     <link rel="preconnect" href="https://www.googletagmanager.com" />
