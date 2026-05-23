@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useIsMobile, usePrefersReducedMotion } from "../../hooks/useMediaQuery";
 import { MouseGlow } from "../ui/MouseGlow";
 import { CharReveal, TextReveal } from "../ui/TextReveal";
-import profileImage from "../../assets/profile1.webp";
+import profileImage from "../../assets/Profile1.webp";
 
 const HeroBackground = lazy(() =>
   import("../three/HeroBackground").then((m) => ({ default: m.HeroBackground }))
