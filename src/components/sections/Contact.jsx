@@ -55,11 +55,11 @@ export function Contact() {
             style={{ color: "var(--accent)" }} />
           <h2 className="font-black tracking-tight leading-[1.0] mb-6" style={{ fontSize: "clamp(2.8rem,7vw,6rem)", color: "var(--text-primary)" }}>
             <CharReveal text="Let's build" inView stagger={0.04} /><br />
-            <span className="text-gradient-violet"><CharReveal text="something." inView delay={0.2} stagger={0.04} /></span>
+            <span className="text-gradient-violet py-1"><CharReveal text="something." inView delay={0.2} stagger={0.04} /></span>
           </h2>
           <TextReveal text="Have a project in mind? Drop a message — I respond within 24 hours."
             inView delay={0.3} stagger={0.04}
-            className="text-base max-w-md mx-auto leading-[1.85] mb-8"
+            className="text-base max-w-md block mx-auto leading-[1.85] mb-8"
             style={{ color: "var(--text-secondary)" }} />
           <motion.a href="mailto:hamzahaikal28@gmail.com"
             whileHover={{ scale: 1.03, boxShadow: "0 0 30px var(--accent-glow)" }} whileTap={{ scale: 0.97 }}
@@ -142,7 +142,7 @@ export function Contact() {
                     style={{ background: "var(--accent-subtle)", border: "1px solid var(--border)", color: "var(--text-muted)" }}>
                     <Icon className="text-sm" />
                   </div>
-                  <div>
+                  <div className="flex flex-col gap-2">
                     <CharReveal text={social.name} inView delay={0.15} stagger={0.05}
                       className="text-sm font-medium transition-colors"
                       style={{ color: "var(--text-primary)" }} />
@@ -156,7 +156,7 @@ export function Contact() {
             })}
             <TextReveal text="Typical response within 24 hours. For urgent inquiries, email directly."
               inView delay={0.2} stagger={0.04}
-              className="text-xs px-1 leading-[1.8]"
+              className="text-xs leading-[1.8]"
               style={{ color: "var(--text-muted)" }} />
           </motion.div>
         </div>

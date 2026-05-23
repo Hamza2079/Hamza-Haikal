@@ -2,6 +2,7 @@ import { useState, useEffect, lazy, Suspense, useRef } from "react";
 import { Navigation }            from "../layout/Navigation";
 import { Hero }                  from "../sections/Hero";
 import { About }                 from "../sections/About";
+import { CtaBanner }             from "../sections/CtaBanner";
 import { ScrollProgressIndicator } from "../ui/ScrollProgressIndicator";
 import { useIsMobile } from "../../hooks/useMediaQuery";
 import Lenis from "lenis";
@@ -99,6 +100,7 @@ function HomePage() {
       <main className="relative">
         <Hero />
         <About />
+        <CtaBanner />
 
         <Suspense fallback={<SectionLoader />}>
           <Works />

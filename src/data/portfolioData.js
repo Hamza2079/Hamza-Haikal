@@ -120,7 +120,7 @@ export const projects = [
     id: 5,
     slug: "daniels-portfolio",
     title: "Daniels Portfolio",
-    category: "Landing Pagess",
+    category: "Landing Pages",
     description:
       "A sleek, highly responsive personal portfolio template tailored for creative professionals, featuring scroll-triggered animations.",
     fullDescription:
@@ -346,7 +346,7 @@ export const projects = [
     id: 12,
     slug: "dar-alraha-bedroom-landing",
     title: "دار الراحة - Saudi Dream Home",
-    category: "Landing Page",
+    category: "Landing Pages",
     description:
       "A luxurious, conversion-driven RTL landing page designed to showcase premium furniture, featuring immersive media and direct WhatsApp integration.",
     fullDescription:
@@ -411,7 +411,7 @@ export const projects = [
     year: "2026",
   },
   {
-  id: 2,
+  id: 14,
   slug: "e7gzly-clinic-management",
   title: "E7gzly",
   category: "Next.js",
@@ -534,6 +534,10 @@ export const techStack = [
   { name: "Git", icon: "FaGitAlt", color: "#F05032" },
   { name: "Vite", icon: "SiVite", color: "#646CFF" },
   { name: "Framer Motion", icon: "SiFramer", color: "#0055FF" },
+  { name: "Supabase", icon: "SiSupabase", color: "#2EB573" },
+  { name: "Appwrite", icon: "SiAppwrite", color: "#FF3E3E" },
+  { name: "Redux", icon: "SiRedux", color: "#764ABC" },
+  { name: "Figma", icon: "SiFigma", color: "#000" },
 ];
 
 export const sectionFade = {

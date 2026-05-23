@@ -107,8 +107,9 @@ export default function ProjectsPage() {
                   key={project.id}
                   project={project}
                   variants={{
-                    hidden: { opacity: 0, scale: 0.9 },
-                    visible: { opacity: 1, scale: 1 },
+                    hidden: { opacity: 0, y: 16, scale: 0.98 },
+                    visible: { opacity: 1, y: 0, scale: 1 },
+                    exit: { opacity: 0, y: 16, scale: 0.98, transition: { duration: 0.25 } }
                   }}
                 />
               ))}

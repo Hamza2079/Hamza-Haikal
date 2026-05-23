@@ -4,9 +4,9 @@ import { CharReveal, TextReveal } from "../ui/TextReveal";
 import { useIsMobile } from "../../hooks/useMediaQuery";
 import { experiences, techStack } from "../../data/portfolioData";
 import { FaReact, FaHtml5, FaCss3Alt, FaGitAlt } from "react-icons/fa";
-import { SiJavascript, SiTypescript, SiTailwindcss, SiNextdotjs, SiVite, SiFramer } from "react-icons/si";
+import { SiJavascript, SiTypescript, SiTailwindcss, SiNextdotjs, SiVite, SiFramer, SiSupabase, SiAppwrite, SiRedux, SiFigma } from "react-icons/si";
 
-const iconMap = { FaReact, SiJavascript, SiTypescript, FaHtml5, FaCss3Alt, SiTailwindcss, SiNextdotjs, FaGitAlt, SiVite, SiFramer };
+const iconMap = { FaReact, SiJavascript, SiTypescript, FaHtml5, FaCss3Alt, SiTailwindcss, SiNextdotjs, FaGitAlt, SiVite, SiFramer, SiSupabase, SiAppwrite, SiRedux, SiFigma };
 const TYPE = {
   Freelance: { color: "#A78BFA", bg: "rgba(139,92,246,0.12)", border: "rgba(139,92,246,0.3)" },
   Education: { color: "#FBBF24", bg: "rgba(251,191,36,0.12)", border: "rgba(251,191,36,0.3)" },

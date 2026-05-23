@@ -66,7 +66,7 @@ export function TextReveal({
       style={{ display: "flex", flexWrap: "wrap", gap: "0 0.25em", ...style }}
     >
       {words.map((word, i) => (
-        <span key={i} style={{ overflow: "hidden", display: "inline-block" }}>
+        <span key={i} style={{ overflow: "hidden", display: "inline-block", paddingBottom: "0.30em", marginBottom: "-0.25em" }}>
           <motion.span
             variants={wordVariants}
             style={{ display: "inline-block" }}
@@ -139,7 +139,7 @@ export function CharReveal({
       className={className}
     >
       {chars.map((char, i) => (
-        <span key={i} style={{ overflow: "hidden", display: "inline-block" }}>
+        <span key={i} style={{ overflow: "hidden", display: "inline-block", paddingBottom: "0.25em", marginBottom: "-0.25em" }}>
           <motion.span
             variants={charVariants}
             style={{ display: "inline-block" }}

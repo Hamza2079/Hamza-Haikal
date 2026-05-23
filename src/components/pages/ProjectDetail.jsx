@@ -58,11 +58,11 @@ export function ProjectDetail() {
               style={{ color: "var(--text-secondary)" }} />
 
             {/* CTA buttons */}
-            <div className="flex flex-wrap gap-4 mt-8">
+            <div className="flex gap-4 mt-8">
               <motion.a href={project.demo} target="_blank" rel="noreferrer"
                 whileHover={{ scale: 1.04, boxShadow: "0 8px 32px var(--accent-glow)" }}
                 whileTap={{ scale: 0.96 }}
-                className="flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold text-white transition-all duration-300"
+                className="flex items-center gap-2 px-6 py-3 rounded-full text-xs font-semibold text-white transition-all duration-300"
                 style={{ background: "var(--accent)", boxShadow: "0 4px 20px var(--accent-glow)" }}>
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -97,7 +97,7 @@ export function ProjectDetail() {
             {/* Features */}
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
               <CharReveal text="Key Features" inView delay={0.1} stagger={0.05}
-                className="text-2xl font-black mb-7"
+                className="text-2xl block font-black mb-7"
                 style={{ color: "var(--text-primary)" }} />
               <ul className="space-y-4">
                 {project.features.map((feature, idx) => (
@@ -123,7 +123,7 @@ export function ProjectDetail() {
             <div className="space-y-12">
               <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
                 <CharReveal text="Tech Stack" inView stagger={0.05}
-                  className="text-2xl font-black mb-6"
+                  className="text-2xl block font-black mb-6"
                   style={{ color: "var(--text-primary)" }} />
                 <div className="flex flex-wrap gap-2">
                   {project.tech.map((t) => (
@@ -137,10 +137,10 @@ export function ProjectDetail() {
 
               <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }}>
                 <CharReveal text="Challenges & Solutions" inView delay={0.1} stagger={0.05}
-                  className="text-2xl font-black"
+                  className="text-2xl mb-3 block font-black"
                   style={{ color: "var(--text-primary)" }} />
                 <TextReveal text={project.challenges} inView delay={0.2} stagger={0.035}
-                  className="text-sm p-4 leading-[1.9]"
+                  className="text-sm leading-[1.9]"
                   style={{ color: "var(--text-secondary)" }} />
               </motion.div>
             </div>
