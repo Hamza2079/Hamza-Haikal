@@ -56,7 +56,7 @@ export function Works() {
                   style={{ color: "var(--accent)" }} />
                 <h2 style={{ fontSize: "clamp(2.2rem,5vw,4rem)", fontWeight: 900, letterSpacing: "-0.02em", lineHeight: 1, color: "var(--text-primary)", margin: 0 }}>
                   <CharReveal text="Featured" inView stagger={0.04} />{' '}
-                  <CharReveal text="Projects." inView delay={0.2} stagger={0.035} className="text-gradient-violet" />
+                  <CharReveal text="Projects." inView delay={0.2} stagger={0.035} className="pb-4 text-gradient-violet" />
                 </h2>
               </div>
 

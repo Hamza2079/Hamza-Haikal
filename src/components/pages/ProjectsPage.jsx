@@ -58,11 +58,11 @@ export default function ProjectsPage() {
           >
             <h1 className="text-4xl sm:text-5xl font-black tracking-tight mb-4" style={{ color: 'var(--text-primary)' }}>
               <CharReveal text="All" inView={false} stagger={0.06} />{' '}
-              <span className="text-gradient-violet"><CharReveal text="Projects." inView={false} delay={0.15} stagger={0.05} /></span>
+              <span><CharReveal className="pb-4 text-gradient-violet" text="Projects." inView={false} delay={0.15} stagger={0.05} /></span>
             </h1>
             <TextReveal text="Explore my complete portfolio of web applications, landing pages, and experiments."
               inView={false} delay={0.25} stagger={0.04}
-              className="text-base max-w-2xl mx-auto leading-relaxed"
+              className="text-base text-center max-w-2xl mx-auto leading-relaxed"
               style={{ color: 'var(--text-secondary)' }} />
           </motion.div>
 

@@ -55,7 +55,7 @@ export function Contact() {
             style={{ color: "var(--accent)" }} />
           <h2 className="font-black tracking-tight leading-[1.0] mb-6" style={{ fontSize: "clamp(2.8rem,7vw,6rem)", color: "var(--text-primary)" }}>
             <CharReveal text="Let's build" inView stagger={0.04} /><br />
-            <CharReveal text="something." inView delay={0.2} stagger={0.04} className="text-gradient-violet py-1" />
+            <CharReveal text="something." inView delay={0.2} stagger={0.04} className="pb-6 text-gradient-violet py-1" />
           </h2>
           <TextReveal text="Have a project in mind? Drop a message — I respond within 24 hours."
             inView delay={0.3} stagger={0.04}
