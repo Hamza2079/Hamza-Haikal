@@ -1,57 +1,34 @@
-import { motion, useSpring, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { useInView } from "framer-motion";
 
-export function AnimatedCounter({ value, label, suffix = "", className = "" }) {
+export function AnimatedCounter({ value, suffix = "", duration = 1.4 }) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.2, margin: "-20px" });
-  const [displayValue, setDisplayValue] = useState(0);
-  const [triggered, setTriggered] = useState(false);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const [display, setDisplay] = useState(0);
 
-  const spring = useSpring(0, { mass: 0.8, stiffness: 75, damping: 15 });
-
-  // Trigger counter when in view
   useEffect(() => {
-    if (isInView && !triggered) {
-      setTriggered(true);
-      spring.set(value);
-    }
-  }, [isInView, value, spring, triggered]);
-
-  // Safety fallback: if the element is mounted for 2s and still hasn't
-  // triggered (edge case on some mobile browsers), force the animation.
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!triggered) {
-        setTriggered(true);
-        spring.set(value);
+    if (!inView) return;
+    let start = 0;
+    const end = value;
+    const steps = 50;
+    const increment = end / steps;
+    const intervalMs = (duration * 1000) / steps;
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= end) {
+        setDisplay(end);
+        clearInterval(timer);
+      } else {
+        setDisplay(Math.floor(start));
       }
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, [value, spring, triggered]);
-
-  useEffect(() => {
-    const unsubscribe = spring.on("change", (latest) => {
-      setDisplayValue(Math.round(latest));
-    });
-    return () => unsubscribe();
-  }, [spring]);
+    }, intervalMs);
+    return () => clearInterval(timer);
+  }, [inView, value, duration]);
 
   return (
-    <div ref={ref} className={`text-center ${className}`}>
-      <motion.span
-        className="text-4xl sm:text-5xl font-bold bg-clip-text text-transparent bg-linear-to-r from-sky-400 to-emerald-400 inline-block"
-        initial={{ opacity: 0, scale: 0.5 }}
-        animate={triggered ? { opacity: 1, scale: 1 } : {}}
-        transition={{ duration: 0.5 }}
-      >
-        {displayValue.toLocaleString()}
-        {suffix}
-      </motion.span>
-      {label && (
-        <p className="text-sm text-slate-400 uppercase tracking-wider mt-2 font-medium">
-          {label}
-        </p>
-      )}
-    </div>
+    <span ref={ref}>
+      {display}
+      {suffix}
+    </span>
   );
 }

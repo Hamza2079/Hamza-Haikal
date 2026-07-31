@@ -1,256 +1,524 @@
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
-import { AnimatedCounter } from "../ui/AnimatedCounter";
-import { CharReveal, TextReveal } from "../ui/TextReveal";
+import { motion } from "framer-motion";
 import { services } from "../../data/portfolioData";
 import { useIsMobile } from "../../hooks/useMediaQuery";
 import profileImage from "../../assets/profile.webp";
 
-// Icon map for each service — SVG paths drawn inline so no extra dep
+/* ── SVG icons ── */
 const serviceIcons = [
-  // Code brackets — React / Next.js
-  <svg key="code" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+  <svg key="code" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square">
     <polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" />
   </svg>,
-  // Layout grid — Responsive UI
-  <svg key="layout" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" />
-    <rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" />
+  <svg key="layout" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square">
+    <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" />
+    <rect x="3" y="14" width="7" height="7" /><rect x="14" y="14" width="7" height="7" />
   </svg>,
-  // Zap — Performance
-  <svg key="zap" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+  <svg key="zap" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square">
     <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
   </svg>,
-  // Sparkles — Animation / Tooling
-  <svg key="sparkles" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
-    <path d="M12 3v1m0 16v1M4.22 4.22l.7.7m12.16 12.16.7.7M3 12h1m16 0h1M4.22 19.78l.7-.7M18.36 5.64l.7-.7" />
-    <circle cx="12" cy="12" r="4" />
+  <svg key="star" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square">
+    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
   </svg>,
 ];
 
 export function About() {
-  const sectionRef = useRef(null);
   const isMobile = useIsMobile();
 
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
-  const imgY = useTransform(scrollYProgress, [0, 1], [0, isMobile ? 0 : 30]);
+  const profileRows = [
+    { k: "NAME",     v: "HAMZA HAIKAL"           },
+    { k: "ROLE",     v: "FRONTEND ENGINEER"       },
+    { k: "BASE",     v: "MENOUFIA (SHEBEN EL KOM) / REMOTE" },
+    { k: "EMAIL",    v: "hamzahaikal28@gmail.com" },
+    { k: "STATUS",   v: "FULL-TIME · PART-TIME · FREELANCE", green: true },
+  ];
 
-  // Card hover variants
-  const cardVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] }
-    },
-    hover: {
-      y: -6,
-      borderColor: "var(--accent)",
-      boxShadow: "0 12px 40px rgba(139, 92, 246, 0.08)",
-      transition: { duration: 0.3, ease: "easeOut" }
-    }
-  };
+  const coreValues = [
+    "SHIP FAST, REFINE RELENTLESSLY",
+    "DETERMINISTIC RENDER PATHS",
+    "ZERO-COMPROMISE PERFORMANCE",
+    "PRODUCTION-READY ON DAY ONE",
+  ];
+
+  const highlights = [
+    { label: "LOCATION",     value: "Sheben El Kom" },
+    { label: "AVAILABILITY", value: "Full / Part / Freelance" },
+    { label: "TECH STACK",   value: "React & Next.js" },
+  ];
 
   return (
-    <section ref={sectionRef} id="about" className="relative py-24 md:py-32 px-6 overflow-hidden" style={{ background: "var(--bg)" }}>
-      {/* Background radial glows */}
-      <div className="absolute inset-0 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse 50% 50% at 80% 20%, rgba(139,92,246,0.06) 0%, transparent 70%)" }} />
-      <div className="absolute inset-0 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse 40% 40% at 10% 80%, rgba(139,92,246,0.04) 0%, transparent 70%)" }} />
-
-      <div className="max-w-7xl mx-auto w-full relative z-10">
+    <section
+      id="about"
+      style={{
+        background: "var(--bg)",
+        overflow: "hidden",
+        borderTop: "2px solid var(--border-ink)",
+        position: "relative",
+      }}
+    >
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: isMobile ? "40px 20px" : "64px 48px" }}>
         
-        {/* Eyebrow / Section Header */}
-        <div className="flex items-center gap-3 mb-10">
-          <div className="h-px w-8 rounded-full" style={{ background: "var(--accent)" }} />
-          <CharReveal text="About Me" inView stagger={0.06}
-            className="text-[11px] font-semibold uppercase tracking-[0.25em]"
-            style={{ color: "var(--accent)" }} />
-        </div>
+        {/* ── SECTION HEADER ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+            borderBottom: "2px solid var(--border-ink)",
+            paddingBottom: 20,
+            marginBottom: 40,
+          }}
+        >
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 6 }}>
+              <motion.span
+                initial={{ opacity: 0, x: -16 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: 0.1 }}
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: 10, fontWeight: 700,
+                  textTransform: "uppercase", letterSpacing: "0.15em",
+                  color: "var(--accent)",
+                }}
+              >
+                // MANIFESTO & PROFILE
+              </motion.span>
+              <span className="stencil-num" style={{ fontSize: "1.8rem", userSelect: "none" }}>
+                02
+              </span>
+            </div>
+            <h2 style={{
+              fontFamily: "var(--font-display)", fontWeight: 800,
+              fontSize: isMobile ? "clamp(2.4rem, 9vw, 3.8rem)" : "clamp(3.2rem, 5vw, 4.8rem)",
+              textTransform: "uppercase", letterSpacing: "-0.03em",
+              lineHeight: 0.88, color: "var(--text-primary)", margin: 0,
+            }}>
+              ABOUT <span style={{ color: "var(--accent)" }}>ME.</span>
+            </h2>
+          </div>
+        </motion.div>
 
-        {/* Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
+        {/* ── BOLD MANIFESTO BANNER (Inspired by Editorial brutalism) ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.55 }}
+          style={{
+            marginBottom: 48,
+            paddingBottom: 32,
+            borderBottom: "2px solid var(--border)",
+          }}
+        >
+          <h3 style={{
+            fontFamily: "var(--font-display)",
+            fontWeight: 800,
+            fontSize: isMobile ? "clamp(2rem, 7.5vw, 3rem)" : "clamp(2.8rem, 4.2vw, 4.4rem)",
+            textTransform: "none",
+            letterSpacing: "-0.03em",
+            lineHeight: 1.05,
+            color: "var(--text-primary)",
+            margin: "0 0 24px 0",
+            maxWidth: 1050,
+          }}>
+            I don't just{" "}
+            <span style={{ textDecoration: "line-through", textDecorationThickness: "3px", textDecorationColor: "var(--border-strong)", opacity: 0.45 }}>
+              write code
+            </span>
+            . I{" "}
+            <span style={{
+              fontFamily: "var(--font-marker)",
+              fontStyle: "italic",
+              color: "var(--accent)",
+              textTransform: "uppercase",
+              letterSpacing: "0.02em",
+            }}>
+              ARCHITECT
+            </span>{" "}
+            digital impact.
+          </h3>
 
-          {/* CARD 1: Full-Bleed Profile Portrait (Spans 2 columns) */}
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+            gap: isMobile ? 16 : 40,
+          }}>
+            <p style={{
+              fontFamily: "var(--font-body)",
+              fontSize: isMobile ? 15 : 16,
+              lineHeight: 1.75,
+              color: "var(--text-secondary)",
+              margin: 0,
+            }}>
+              Every click is a commitment. I engineer the logic underlying every layout with the same intensity as the visual surface — instant load speeds, responsive behavior, and the subtle details users feel without ever having to think about.
+            </p>
+            <p style={{
+              fontFamily: "var(--font-body)",
+              fontSize: isMobile ? 14 : 15,
+              lineHeight: 1.75,
+              color: "var(--text-muted)",
+              margin: 0,
+            }}>
+              Shipping production software taught me what actually matters: <strong style={{ color: "var(--text-primary)" }}>code with purpose, build for scale, ship without fear</strong>. Structure over clutter. Speed over noise. Then make it visually unforgettable.
+            </p>
+          </div>
+        </motion.div>
+
+        {/* ── MAIN BALANCED GRID (2 EQUAL-HEIGHT COLUMNS) ── */}
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: isMobile ? "1fr" : "360px 1fr",
+          gap: isMobile ? 32 : 44,
+          alignItems: "stretch",
+          marginBottom: 40,
+        }}>
+          
+          {/* LEFT COLUMN: Photo & Core Values */}
           <motion.div
-            variants={cardVariants}
-            initial="hidden"
-            whileInView="visible"
-            whileHover="hover"
-            viewport={{ once: true, margin: "-40px" }}
-            className="md:col-span-2 relative rounded-3xl border overflow-hidden transition-all duration-300 group flex flex-col justify-between"
-            style={{ borderColor: "var(--border)", minHeight: "380px" }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            style={{ display: "flex", flexDirection: "column", gap: 20, justifyContent: "space-between" }}
           >
-            {/* Full-bleed background image with parallax */}
-            <div className="absolute inset-0 w-full h-full overflow-hidden">
-              <motion.div className="w-full h-full">
+            {/* Polaroid Photo Card */}
+            <motion.div
+              initial={{ opacity: 0, rotate: -6, y: 20 }}
+              whileInView={{ opacity: 1, rotate: -2.5, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              className="peel-hover"
+              style={{
+                border: "3px solid var(--border-ink)",
+                padding: "8px 8px 40px",
+                background: "var(--bg-surface)",
+                boxShadow: "var(--shadow-hard-ink)",
+                position: "relative",
+              }}
+            >
+              {/* Tape anchor */}
+              <div className="tape-anchor" style={{ top: -10, right: "18%", width: 88, height: 24, transform: "rotate(7deg)", zIndex: 20 }} />
+
+              {/* Amber glow */}
+              <div style={{
+                position: "absolute", bottom: -20, right: -20,
+                width: 140, height: 140,
+                background: "var(--accent-glow)",
+                filter: "blur(28px)",
+                borderRadius: "50%", pointerEvents: "none", zIndex: 0,
+              }} />
+
+              <div style={{ position: "relative", overflow: "hidden", maxHeight: 340, zIndex: 1 }}>
                 <img
                   src={profileImage}
                   alt="Hamza Haikal"
                   loading="lazy"
                   decoding="async"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  className="w-full h-full object-cover"
+                  style={{
+                    width: "100%", height: 340,
+                    objectFit: "cover", objectPosition: "top center",
+                    display: "block",
+                    filter: "contrast(1.06) brightness(0.9) saturate(0.9)",
+                  }}
                 />
-              </motion.div>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-transparent pointer-events-none" />
-            </div>
+                {/* Amber tint */}
+                <div style={{
+                  position: "absolute", inset: 0,
+                  background: "linear-gradient(135deg, transparent 55%, rgba(245,158,11,0.16))",
+                  pointerEvents: "none",
+                }} />
+              </div>
 
-            {/* Content overlay */}
-            <div className="absolute inset-0 p-6 flex flex-col justify-between z-10">
-              {/* Availability Badge */}
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold text-white/60 uppercase tracking-widest">Identity</span>
-                <div className="flex items-center gap-2 px-2.5 py-1 rounded-full text-[10px] font-semibold bg-black/40 backdrop-blur-md border border-white/10">
-                  <span className="relative flex h-1.5 w-1.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400" />
+              <div style={{ position: "absolute", bottom: 12, left: 0, right: 0, textAlign: "center", zIndex: 2 }}>
+                <span className="marker-callout" style={{ fontSize: 14 }}>HAMZA HAIKAL →</span>
+              </div>
+
+              {/* Glass sticker badge */}
+              <div className="glass-panel z-20" style={{
+                  position: "absolute", top: -18, right: -18,
+                  width: 70, height: 70,
+                  borderRadius: "50%",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  textAlign: "center", transform: "rotate(-14deg)",
+                  border: "2px solid var(--accent-dim)",
+                  boxShadow: "3px 3px 0 0 var(--spray-accent)",
+                }}>
+                  <span style={{
+                    fontFamily: "var(--font-mono)", fontSize: 7.5,
+                    fontWeight: 700, textTransform: "uppercase",
+                    letterSpacing: "0.04em",
+                    color: "var(--text-primary)", lineHeight: 1.35,
+                  }}>
+                    OPEN<br />FOR<br />HIRE
                   </span>
-                  <span className="text-white/90">Available</span>
                 </div>
-              </div>
+            </motion.div>
 
-              {/* Personal Details */}
-              <div className="mt-auto">
-                <h3 className="text-xl font-bold tracking-tight text-white mb-1">
-                  Hamza Haikal
-                </h3>
-                <p className="text-xs font-semibold text-gradient-violet">
-                  Frontend Engineer
-                </p>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* CARD 2: Editorial Philosophy (Spans 4 columns) */}
-          <motion.div
-            variants={cardVariants}
-            initial="hidden"
-            whileInView="visible"
-            whileHover="hover"
-            viewport={{ once: true, margin: "-40px" }}
-            className="md:col-span-4 flex flex-col p-8 rounded-3xl border justify-between relative transition-all duration-300"
-            style={{ background: "var(--bg-surface)", borderColor: "var(--border)" }}
-          >
-            {/* Background grid texture inside card */}
-            <div className="absolute inset-0 dot-grid opacity-15 pointer-events-none" />
-
-            <div className="relative z-10 mb-6">
-              <span className="text-[10px] font-bold text-gradient-violet uppercase tracking-widest block mb-4">Philosophy</span>
-              <h2 className="text-2xl sm:text-3xl font-black tracking-tight leading-snug mb-5" style={{ color: "var(--text-primary)" }}>
-                Transforming ideas into <span className="text-gradient-violet">reality.</span>
-              </h2>
-              <div className="space-y-4">
-                <p className="text-sm sm:text-base leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-                  I am dedicated to crafting fluid digital interfaces that combine clean structure, high speed, and visual elegance. I believe that writing code is as much about architecture and design as it is about problem solving.
-                </p>
-                <p className="text-sm sm:text-base leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-                  My process centers on code hygiene, performance budgets, and creating responsive systems. I focus on translating complex user journeys into delightful animations and bulletproof interactive layouts.
-                </p>
-              </div>
-            </div>
-
-            {/* Highlight quote footer */}
-            <div className="pt-4 relative z-10" style={{ borderTop: "1px solid var(--border)" }}>
-              <p className="text-xs italic" style={{ color: "var(--text-muted)" }}>
-                "Every line of code should be written with intention, accessibility, and scale in mind."
-              </p>
-            </div>
-          </motion.div>
-
-          {/* CARD 3: Stats Dashboard (Spans 2 columns) */}
-          <motion.div
-            variants={cardVariants}
-            initial="hidden"
-            whileInView="visible"
-            whileHover="hover"
-            viewport={{ once: true, margin: "-40px" }}
-            className="md:col-span-2 flex flex-col p-6 rounded-3xl border justify-between transition-all duration-300"
-            style={{ background: "var(--bg-surface)", borderColor: "var(--border)" }}
-          >
-            <div>
-              <span className="text-[10px] font-bold text-gradient-violet uppercase tracking-widest block mb-4">Dashboard</span>
-              <h3 className="text-lg font-bold tracking-tight mb-6" style={{ color: "var(--text-primary)" }}>
-                Key Metrics
-              </h3>
-            </div>
-
-            {/* Vertical Stats stack */}
-            <div className="space-y-4 flex-1 flex flex-col justify-center">
-              {[
-                { val: 1,  label: "Years Exp.", suffix: "+" },
-                { val: 13, label: "Projects Deployed",  suffix: "+" },
-                { val: 1, label: "Happy Clients", },
-              ].map(({ val, label, suffix }) => (
-                <div
-                  key={label}
-                  className="flex items-center justify-between p-3.5 rounded-xl border transition-all duration-300 hover:border-[var(--accent)]"
-                  style={{ background: "var(--bg-elevated)", borderColor: "var(--border)" }}
+            {/* Core Values Box — amber accent-left border */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+              style={{
+                border: "2px solid var(--border-ink)",
+                borderLeft: "4px solid var(--spray-accent)",
+                padding: "18px 22px",
+                background: "var(--bg-surface)",
+                boxShadow: "4px 4px 0 0 var(--spray-accent)",
+              }}
+            >
+              <span style={{
+                fontFamily: "var(--font-mono)", fontSize: 9.5,
+                fontWeight: 700, textTransform: "uppercase",
+                letterSpacing: "0.14em", color: "var(--spray-accent)",
+                display: "block", marginBottom: 10,
+              }}>
+                // ARCHITECTURAL_PRINCIPLES
+              </span>
+              {coreValues.map((v, i) => (
+                <motion.div
+                  key={v}
+                  initial={{ opacity: 0, x: -12 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: 0.08 + i * 0.07 }}
+                  style={{
+                    fontFamily: "var(--font-mono)", fontSize: 9.5, fontWeight: 600,
+                    color: "var(--text-secondary)",
+                    padding: "6px 0",
+                    borderBottom: i < coreValues.length - 1 ? "1px solid var(--border)" : "none",
+                    display: "flex", alignItems: "center", gap: 8,
+                  }}
                 >
-                  <span className="text-xs font-semibold" style={{ color: "var(--text-secondary)" }}>
+                  <span style={{ width: 8, height: 2, background: "var(--spray-accent)", display: "inline-block", flexShrink: 0 }} />
+                  {v}
+                </motion.div>
+              ))}
+            </motion.div>
+          </motion.div>
+
+          {/* RIGHT COLUMN: Profile Data Table, Stats & Quote */}
+          <motion.div
+            initial={{ opacity: 0, x: 28 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.6, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+            style={{ display: "flex", flexDirection: "column", gap: 20, justifyContent: "space-between" }}
+          >
+            {/* Profile Data Table */}
+            <div style={{
+              border: "2px solid var(--border-ink)",
+              boxShadow: "var(--shadow-hard-ink)",
+              background: "var(--bg-surface)",
+              overflow: "hidden",
+            }}>
+              {profileRows.map(({ k, v, green }, i) => (
+                <div key={k} style={{
+                  display: "grid",
+                  gridTemplateColumns: "90px 1fr",
+                  borderBottom: i < profileRows.length - 1 ? "1px solid var(--border)" : "none",
+                }}>
+                  <div style={{
+                    padding: "9px 12px",
+                    background: "var(--bg-elevated)",
+                    fontFamily: "var(--font-mono)",
+                    fontSize: 8,
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.12em",
+                    color: "var(--text-muted)",
+                    borderRight: "1px solid var(--border)",
+                    display: "flex",
+                    alignItems: "center",
+                  }}>
+                    {k}
+                  </div>
+                  <div style={{
+                    padding: "9px 12px",
+                    fontFamily: "var(--font-mono)",
+                    fontSize: 10,
+                    fontWeight: 600,
+                    color: green ? "#4ADE80" : "var(--text-primary)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
+                    overflowWrap: "anywhere",
+                  }}>
+                    {green && <span style={{ width: 5, height: 5, background: "#4ADE80", borderRadius: "50%", flexShrink: 0 }} />}
+                    {v}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Highlights Row */}
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
+              border: "2px solid var(--border-ink)",
+              boxShadow: "var(--shadow-hard-ink)",
+              background: "var(--bg-elevated)",
+            }}>
+              {highlights.map(({ label, value }, i) => (
+                <div key={label} style={{
+                  padding: "16px 14px",
+                  textAlign: "center",
+                  borderRight: !isMobile && i < 2 ? "1px solid var(--border)" : "none",
+                  borderBottom: isMobile && i < 2 ? "1px solid var(--border)" : "none",
+                }}>
+                  <div style={{
+                    fontFamily: "var(--font-display)",
+                    fontWeight: 800,
+                    fontSize: "clamp(1rem, 2vw, 1.25rem)",
+                    color: "var(--accent)",
+                    lineHeight: 1.1,
+                    marginBottom: 6,
+                    textTransform: "uppercase",
+                    letterSpacing: "-0.01em",
+                  }}>
+                    {value}
+                  </div>
+                  <div style={{
+                    fontFamily: "var(--font-mono)",
+                    fontSize: 8,
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.12em",
+                    color: "var(--text-muted)",
+                  }}>
                     {label}
-                  </span>
-                  <span className="text-xl font-black text-gradient-violet shrink-0 ml-4">
-                    <AnimatedCounter value={val} suffix={suffix} />
-                  </span>
+                  </div>
                 </div>
               ))}
             </div>
 
-            <div className="mt-6 pt-4 text-center" style={{ borderTop: "1px solid var(--border)" }}>
-              <p className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>
-                ⚡ Performance Output
+            {/* Quote Block */}
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.45, delay: 0.2 }}
+              style={{
+                borderLeft: "4px solid var(--accent)",
+                padding: "16px 20px",
+                background: "var(--bg-elevated)",
+              }}
+            >
+              <p style={{
+                fontFamily: "var(--font-marker)",
+                fontStyle: "italic",
+                fontSize: 14,
+                lineHeight: 1.6,
+                color: "var(--text-secondary)",
+                margin: 0,
+              }}>
+                "Good code makes an application work. Great frontend architecture makes it feel alive."
               </p>
-            </div>
-          </motion.div>
+            </motion.div>
 
-          {/* CARD 4: Capabilities Grid (Spans 4 columns) */}
-          <motion.div
-            variants={cardVariants}
-            initial="hidden"
-            whileInView="visible"
-            whileHover="hover"
-            viewport={{ once: true, margin: "-40px" }}
-            className="md:col-span-4 p-8 rounded-3xl border transition-all duration-300"
-            style={{ background: "var(--bg-surface)", borderColor: "var(--border)" }}
-          >
-            <div className="mb-6">
-              <span className="text-[10px] font-bold text-gradient-violet uppercase tracking-widest block mb-1">Services</span>
-              <h3 className="text-lg font-bold tracking-tight" style={{ color: "var(--text-primary)" }}>
-                My Core Expertise
-              </h3>
-            </div>
-
-            {/* 2x2 Services Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              {services.map((service, idx) => (
-                <div
-                  key={service.number}
-                  className="flex gap-4 items-start p-4 rounded-2xl border transition-all duration-300 hover:bg-[rgba(255,255,255,0.015)]"
-                  style={{ borderColor: "var(--border)" }}
-                >
-                  {/* Icon Box */}
-                  <div className="shrink-0 w-9 h-9 rounded-xl flex items-center justify-center"
-                    style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", color: "var(--accent)" }}>
-                    <div className="w-4 h-4">{serviceIcons[idx]}</div>
-                  </div>
-
-                  <div>
-                    <h4 className="text-sm font-bold mb-1" style={{ color: "var(--text-primary)" }}>
-                      {service.title}
-                    </h4>
-                    <p className="text-xs leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-                      {service.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
           </motion.div>
 
         </div>
+
+        {/* ── SERVICES GRID (Full width bottom) ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 32 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <div style={{ marginBottom: 16 }}>
+            <span style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: 10,
+              fontWeight: 700,
+              textTransform: "uppercase",
+              letterSpacing: "0.14em",
+              color: "var(--accent)",
+              display: "block",
+            }}>
+              // CORE_CAPABILITIES
+            </span>
+          </div>
+
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: isMobile ? "1fr" : "repeat(4, 1fr)",
+            border: "2px solid var(--border-ink)",
+            boxShadow: "var(--shadow-hard-ink)",
+            background: "var(--bg-surface)",
+          }}>
+            {services.map((s, i) => (
+              <motion.div
+                key={s.number}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.45, delay: 0.06 + i * 0.09 }}
+                style={{
+                  padding: "20px 20px",
+                  borderRight: !isMobile && i < 3 ? "1px solid var(--border)" : "none",
+                  borderBottom: isMobile && i < 3 ? "1px solid var(--border)" : "none",
+                  transition: "background 0.2s ease",
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = "var(--bg-elevated)"}
+                onMouseLeave={e => e.currentTarget.style.background = "var(--bg-surface)"}
+              >
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+                  <span style={{
+                    fontFamily: "var(--font-mono)",
+                    fontSize: 9,
+                    fontWeight: 700,
+                    color: "var(--accent)",
+                  }}>
+                    0{i + 1}
+                  </span>
+                  <div style={{
+                    width: 28,
+                    height: 28,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    border: "1px solid var(--border-strong)",
+                    color: "var(--accent)",
+                  }}>
+                    <div style={{ width: 13, height: 13 }}>{serviceIcons[i]}</div>
+                  </div>
+                </div>
+
+                <h4 style={{
+                  fontFamily: "var(--font-display)",
+                  fontWeight: 700,
+                  fontSize: 15,
+                  textTransform: "uppercase",
+                  letterSpacing: "-0.01em",
+                  color: "var(--text-primary)",
+                  margin: "0 0 6px 0",
+                }}>
+                  {s.title}
+                </h4>
+                <p style={{
+                  fontFamily: "var(--font-body)",
+                  fontSize: 11.5,
+                  lineHeight: 1.55,
+                  color: "var(--text-muted)",
+                  margin: 0,
+                }}>
+                  {s.description}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
       </div>
     </section>
   );
 }
+
+export default About;

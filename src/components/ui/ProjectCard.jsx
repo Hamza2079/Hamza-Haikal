@@ -34,53 +34,49 @@ export function ProjectCard({ project, variants }) {
       className="group h-full cursor-pointer"
       onClick={handleClick}
     >
-      <motion.div
-        whileHover={shouldReduceMotion ? {} : { y: -6 }}
-        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        className="relative h-full rounded-2xl overflow-hidden border flex flex-col"
+      <div
+        className="peel-hover relative h-full flex flex-col"
         style={{
           background: 'var(--bg-surface)',
-          borderColor: 'var(--border)',
+          border: '3px solid var(--border-ink)',
+          boxShadow: 'var(--shadow-hard-ink)',
         }}
       >
+        {/* Tape anchor — Amber */}
+        <div className="tape-anchor" style={{ top: -10, left: 16, width: 88, height: 22, transform: "rotate(-7deg)", zIndex: 20 }} />
+
         {/* Image */}
-        <div className="relative aspect-[4/3] overflow-hidden">
+        <div className="relative aspect-[16/10] overflow-hidden border-b-2 border-[var(--border-ink)]">
           {project.image && (
             <>
               <div
                 className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                style={{ backgroundImage: `url(${project.image})` }}
+                style={{
+                  backgroundImage: `url(${project.image})`,
+                  filter: 'grayscale(50%) contrast(1.05)',
+                }}
               />
-              {/* Hover overlay */}
-              <div className="absolute inset-0 transition-all duration-500 group-hover:opacity-75"
-                style={{ background: 'var(--bg)', opacity: 0 }} />
 
               {/* Hover actions */}
               <div className="absolute inset-0 flex items-center justify-center gap-3
-                             opacity-0 group-hover:opacity-100 transition-opacity duration-400 p-4">
+                             opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-4 bg-black/60">
                 <a
                   href={project.demo}
                   target={project.demo === "#" ? undefined : "_blank"}
                   rel="noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  style={{
-                    padding: '8px 16px', borderRadius: 999, fontSize: 12, fontWeight: 600,
-                    background: 'var(--accent)', color: '#fff', textDecoration: 'none',
-                    boxShadow: '0 4px 20px var(--accent-glow)',
-                  }}
+                  className="btn-brutal"
+                  style={{ padding: '8px 14px', fontSize: 11 }}
                 >
-                  Live Demo
+                  Live Demo ↗
                 </a>
                 <a
                   href={project.github}
                   target={project.github === "#" ? undefined : "_blank"}
                   rel="noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  style={{
-                    padding: '8px 16px', borderRadius: 999, fontSize: 12, fontWeight: 600,
-                    background: 'var(--accent-subtle)', border: '1px solid var(--border-strong)',
-                    color: 'var(--text-primary)', textDecoration: 'none', backdropFilter: 'blur(8px)',
-                  }}
+                  className="btn-brutal-ghost"
+                  style={{ padding: '8px 14px', fontSize: 11, color: '#fff', borderColor: '#fff' }}
                 >
                   GitHub
                 </a>
@@ -88,10 +84,11 @@ export function ProjectCard({ project, variants }) {
 
               {/* Category tag */}
               <div className="absolute top-3 left-3 z-10">
-                <span className="text-[10px] font-semibold uppercase tracking-widest px-3 py-1.5 rounded-full"
+                <span className="mono-label px-2.5 py-1"
                   style={{
-                    color: '#fff', background: 'rgba(9,9,11,0.8)',
-                    border: '1px solid rgba(255,255,255,0.1)',
+                    color: 'var(--text-inverse)',
+                    background: 'var(--text-primary)',
+                    border: '1px solid var(--border-ink)',
                   }}>
                   {project.category}
                 </span>
@@ -102,11 +99,11 @@ export function ProjectCard({ project, variants }) {
 
         {/* Content */}
         <div className="p-5 flex-1 flex flex-col">
-          <h3 className="text-base font-bold mb-2 line-clamp-2 leading-snug"
+          <h3 className="font-display font-bold text-lg mb-2 line-clamp-2 uppercase tracking-tight"
             style={{ color: 'var(--text-primary)' }}>
             {project.title}
           </h3>
-          <p className="text-sm leading-relaxed mb-4 line-clamp-3 flex-1"
+          <p className="font-body text-xs leading-relaxed mb-4 line-clamp-3 flex-1"
             style={{ color: 'var(--text-secondary)' }}>
             {project.description}
           </p>
@@ -114,24 +111,18 @@ export function ProjectCard({ project, variants }) {
           {/* Tech pills */}
           <div className="flex flex-wrap gap-1.5 mt-auto">
             {project.tech.slice(0, 4).map((t) => (
-              <span key={t}
-                className="text-[10px] px-2.5 py-1 rounded-full border"
-                style={{
-                  borderColor: 'var(--border)', background: 'var(--accent-subtle)',
-                  color: 'var(--text-secondary)',
-                }}>
+              <span key={t} className="chip-mono">
                 {t}
               </span>
             ))}
             {project.tech.length > 4 && (
-              <span className="text-[10px] px-2.5 py-1 rounded-full"
-                style={{ border: '1px solid var(--border)', color: 'var(--text-muted)' }}>
+              <span className="chip-mono">
                 +{project.tech.length - 4}
               </span>
             )}
           </div>
         </div>
-      </motion.div>
+      </div>
     </motion.div>
   );
 }

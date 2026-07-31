@@ -6,24 +6,54 @@ import HomePage from "./components/pages/HomePage";
 const ProjectDetail = lazy(() => import("./components/pages/ProjectDetail"));
 const ProjectsPage  = lazy(() => import("./components/pages/ProjectsPage"));
 
+/* Brutalist loader — no violet, no glow, just ink */
 const PageLoader = () => (
   <div
-    className="min-h-screen flex items-center justify-center"
-    style={{ background: "#09090B" }}
+    style={{
+      minHeight: "100vh",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      background: "#111111",
+    }}
   >
-    <div className="flex flex-col items-center gap-6">
-      {/* Minimal violet loader */}
-      <div className="flex gap-1.5">
-        {[0, 1, 2].map((i) => (
-          <div
-            key={i}
-            className="w-1.5 h-1.5 rounded-full bg-[#8B5CF6]/60 animate-pulse"
-            style={{ animationDelay: `${i * 0.2}s` }}
-          />
-        ))}
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {/* Blinking cursor — brutalist loading indicator */}
+      <p style={{
+        fontFamily: "'JetBrains Mono', monospace",
+        fontSize: 13,
+        fontWeight: 700,
+        letterSpacing: "0.1em",
+        textTransform: "uppercase",
+        color: "#F5F0E8",
+        margin: 0,
+      }}>
+        LOADING<span style={{ color: "#E8721C", animation: "none" }}>_</span>
+      </p>
+      {/* Hard amber progress indicator */}
+      <div style={{
+        width: 120,
+        height: 2,
+        background: "#2E2E2E",
+        position: "relative",
+        overflow: "hidden",
+      }}>
+        <div style={{
+          position: "absolute",
+          top: 0, left: 0,
+          width: "40%",
+          height: "100%",
+          background: "#E8721C",
+          animation: "slide-loader 1s ease-in-out infinite alternate",
+        }} />
       </div>
-      <p className="text-[11px] text-white/20 uppercase tracking-widest font-medium">Loading</p>
     </div>
+    <style>{`
+      @keyframes slide-loader {
+        from { left: -40%; }
+        to   { left: 100%; }
+      }
+    `}</style>
   </div>
 );
 
