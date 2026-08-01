@@ -13,6 +13,9 @@ export function Works() {
   const [activeIdx, setActiveIdx] = useState(0);
   const isMobile = useIsMobile();
 
+  const touchStartY = useRef(0);
+  const touchEndY = useRef(0);
+
   const { scrollYProgress } = useScroll({
     target: outerRef,
     offset: ["start start", "end end"]
@@ -21,6 +24,37 @@ export function Works() {
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     setActiveIdx(Math.min(Math.floor(latest * N), N - 1));
   });
+
+  const scrollToProject = (i) => {
+    const el = outerRef.current;
+    if (!el) return;
+    const safeIdx = Math.max(0, Math.min(i, N - 1));
+    // Use getBoundingClientRect for true absolute document position
+    const elTop = el.getBoundingClientRect().top + window.scrollY;
+    const totalScrollable = el.offsetHeight - window.innerHeight;
+    const targetY = elTop + (safeIdx / N) * totalScrollable + 5;
+    window.scrollTo({ top: targetY, behavior: "smooth" });
+  };
+
+  const handleTouchStart = (e) => {
+    touchStartY.current = e.targetTouches[0].clientY;
+    touchEndY.current = e.targetTouches[0].clientY;
+  };
+
+  const handleTouchMove = (e) => {
+    touchEndY.current = e.targetTouches[0].clientY;
+  };
+
+  const handleTouchEnd = () => {
+    const diffY = touchStartY.current - touchEndY.current;
+    if (Math.abs(diffY) < 40) return;
+
+    if (diffY > 40 && activeIdx < N - 1) {
+      scrollToProject(activeIdx + 1);
+    } else if (diffY < -40 && activeIdx > 0) {
+      scrollToProject(activeIdx - 1);
+    }
+  };
 
   const project = featured[activeIdx];
 
@@ -59,8 +93,8 @@ export function Works() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
             style={{
-              paddingTop: isMobile ? 56 : 88,
-              paddingBottom: 20,
+              paddingTop: isMobile ? 36 : 88,
+              paddingBottom: isMobile ? 12 : 20,
               maxWidth: 1280,
               width: "100%",
               margin: "0 auto",
@@ -71,11 +105,11 @@ export function Works() {
               display: "flex",
               alignItems: "flex-end",
               justifyContent: "space-between",
-              gap: 24,
-              flexWrap: isMobile ? "wrap" : "nowrap",
+              gap: isMobile ? 12 : 24,
+              flexWrap: "nowrap",
             }}>
               <div>
-                <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: isMobile ? 4 : 8 }}>
                   <span style={{
                     fontFamily: "var(--font-mono)",
                     fontSize: 10,
@@ -86,14 +120,14 @@ export function Works() {
                   }}>
                     // SELECTED_WORK
                   </span>
-                  <span className="stencil-num" style={{ fontSize: "1.8rem", userSelect: "none" }}>
+                  <span className="stencil-num" style={{ fontSize: isMobile ? "1.4rem" : "1.8rem", userSelect: "none" }}>
                     03
                   </span>
                 </div>
                 <h2 style={{
                   fontFamily: "var(--font-display)",
                   fontWeight: 800,
-                  fontSize: "clamp(2.4rem, 5.5vw, 5rem)",
+                  fontSize: isMobile ? "clamp(1.6rem, 5.5vw, 2.5rem)" : "clamp(2.4rem, 5.5vw, 5rem)",
                   textTransform: "uppercase",
                   letterSpacing: "-0.03em",
                   lineHeight: 0.9,
@@ -105,13 +139,12 @@ export function Works() {
                 </h2>
               </div>
 
-              {/* Counter + dots + View All button */}
-              <div style={{ display: "flex", alignItems: "center", gap: isMobile ? 12 : 20, flexShrink: 0, flexWrap: "wrap" }}>
-                
+              {/* Counter + dots + View All button beside title */}
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: isMobile ? 8 : 12, flexShrink: 0 }}>
                 <Link to="/projects" style={{ textDecoration: "none" }}>
                   <motion.div
                     className="btn-brutal"
-                    style={{ padding: "8px 16px", fontSize: 11 }}
+                    style={{ padding: isMobile ? "6px 12px" : "8px 16px", fontSize: isMobile ? 10 : 11 }}
                     whileHover={{ y: -2, boxShadow: "var(--shadow-hard-ink)" }}
                     whileTap={{ y: 0, boxShadow: "none" }}
                   >
@@ -119,18 +152,36 @@ export function Works() {
                   </motion.div>
                 </Link>
 
-                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                  <div style={{ display: "flex", gap: 6 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: isMobile ? 6 : 10 }}>
+                  {/* Prev Arrow Button */}
+                  <button
+                    disabled={activeIdx === 0}
+                    onClick={() => scrollToProject(activeIdx - 1)}
+                    style={{
+                      padding: "2px 6px",
+                      fontSize: 11,
+                      fontFamily: "var(--font-mono)",
+                      fontWeight: 700,
+                      background: "transparent",
+                      border: "1px solid var(--border-strong)",
+                      color: activeIdx === 0 ? "var(--text-muted)" : "var(--text-primary)",
+                      cursor: activeIdx === 0 ? "default" : "pointer",
+                      opacity: activeIdx === 0 ? 0.35 : 1,
+                      transition: "all 0.15s",
+                    }}
+                    aria-label="Previous Project"
+                  >
+                    ←
+                  </button>
+
+                  <div style={{ display: "flex", gap: isMobile ? 4 : 6 }}>
                     {featured.map((_, i) => (
                       <button
                         key={i}
-                        onClick={() => {
-                          const el = outerRef.current; if (!el) return;
-                          window.scrollTo({ top: el.offsetTop + (i / N) * el.offsetHeight, behavior: "smooth" });
-                        }}
+                        onClick={() => scrollToProject(i)}
                         style={{
-                          width: i === activeIdx ? 28 : 8,
-                          height: 8,
+                          width: i === activeIdx ? (isMobile ? 18 : 26) : (isMobile ? 6 : 8),
+                          height: isMobile ? 6 : 8,
                           background: i === activeIdx ? "var(--accent)" : "var(--border-strong)",
                           border: "none",
                           padding: 0,
@@ -141,21 +192,43 @@ export function Works() {
                       />
                     ))}
                   </div>
+
                   <span style={{
                     fontFamily: "var(--font-mono)",
-                    fontSize: 11,
+                    fontSize: isMobile ? 10 : 11,
                     fontWeight: 700,
                     color: "var(--text-muted)",
                     fontVariantNumeric: "tabular-nums",
                   }}>
                     {String(activeIdx + 1).padStart(2, "0")} / {String(N).padStart(2, "0")}
                   </span>
+
+                  {/* Next Arrow Button */}
+                  <button
+                    disabled={activeIdx === N - 1}
+                    onClick={() => scrollToProject(activeIdx + 1)}
+                    style={{
+                      padding: "2px 6px",
+                      fontSize: 11,
+                      fontFamily: "var(--font-mono)",
+                      fontWeight: 700,
+                      background: "transparent",
+                      border: "1px solid var(--border-strong)",
+                      color: activeIdx === N - 1 ? "var(--text-muted)" : "var(--text-primary)",
+                      cursor: activeIdx === N - 1 ? "default" : "pointer",
+                      opacity: activeIdx === N - 1 ? 0.35 : 1,
+                      transition: "all 0.15s",
+                    }}
+                    aria-label="Next Project"
+                  >
+                    →
+                  </button>
                 </div>
               </div>
             </div>
 
             {/* Hard ink rule */}
-            <div className="ink-rule-strong" style={{ marginTop: 20 }} />
+            <div className="ink-rule-strong" style={{ marginTop: isMobile ? 12 : 20 }} />
           </motion.div>
 
           {/* ── Project content crossfade ── */}
@@ -172,6 +245,9 @@ export function Works() {
               minHeight: 0,
               position: "relative",
             }}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
           >
             <AnimatePresence mode="wait">
               <motion.div
@@ -185,10 +261,10 @@ export function Works() {
                   inset: 0,
                   display: "grid",
                   gridTemplateColumns: isMobile ? "1fr" : "1.1fr 1fr",
-                  gap: isMobile ? 24 : 56,
+                  gap: isMobile ? 16 : 56,
                   alignItems: "center",
-                  paddingTop: 24,
-                  paddingBottom: 24,
+                  paddingTop: isMobile ? 12 : 24,
+                  paddingBottom: isMobile ? 12 : 24,
                 }}
               >
                 {/* ── Image — rotated, hard shadow, tactile peel card ── */}
@@ -305,7 +381,7 @@ export function Works() {
                 </div>
 
                 {/* ── Text block ── */}
-                <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: isMobile ? 12 : 20 }}>
                   {/* Label + year */}
                   <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                     <span style={{
@@ -335,7 +411,7 @@ export function Works() {
                       style={{
                         fontFamily: "var(--font-display)",
                         fontWeight: 800,
-                        fontSize: "clamp(1.8rem, 3.5vw, 3rem)",
+                        fontSize: isMobile ? "clamp(1.5rem, 4vw, 2.2rem)" : "clamp(1.8rem, 3.5vw, 3rem)",
                         textTransform: "uppercase",
                         letterSpacing: "-0.02em",
                         lineHeight: 0.92,
@@ -373,8 +449,8 @@ export function Works() {
                   {/* Description */}
                   <p style={{
                     fontFamily: "var(--font-body)",
-                    fontSize: 14,
-                    lineHeight: 1.8,
+                    fontSize: isMobile ? 13 : 14,
+                    lineHeight: isMobile ? 1.6 : 1.8,
                     color: "var(--text-secondary)",
                     margin: 0,
                     maxWidth: isMobile ? "none" : 400,
@@ -420,31 +496,43 @@ export function Works() {
           {/* Scroll hint */}
           {activeIdx < N - 1 && (
             <div style={{
-              paddingBottom: 20,
+              paddingBottom: isMobile ? 12 : 20,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              gap: 6,
-              opacity: 0.45,
+              gap: 4,
               flexShrink: 0,
-            }}>
-              <span style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: 9,
-                textTransform: "uppercase",
-                letterSpacing: "0.18em",
-                color: "var(--text-muted)",
+              cursor: "pointer",
+            }}
+            onClick={() => scrollToProject(activeIdx + 1)}>
+              <div style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                padding: isMobile ? "4px 10px" : "6px 14px",
+                background: "var(--bg)",
+                border: "1px solid var(--accent)",
+                boxShadow: "0 2px 6px rgba(0,0,0,0.06)",
               }}>
-                SCROLL FOR NEXT
-              </span>
-              <motion.svg
-                animate={{ y: [0, 5, 0] }}
-                transition={{ duration: 1.4, repeat: Infinity }}
-                style={{ width: 12, height: 12, color: "var(--text-muted)" }}
-                fill="none" viewBox="0 0 24 24" stroke="currentColor"
-              >
-                <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </motion.svg>
+                <span style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: isMobile ? 9 : 10,
+                  fontWeight: 700,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.15em",
+                  color: "var(--accent)",
+                }}>
+                  {isMobile ? "SWIPE / SCROLL FOR NEXT" : "SCROLL FOR NEXT"}
+                </span>
+                <motion.svg
+                  animate={{ y: [0, 4, 0] }}
+                  transition={{ duration: 1.2, repeat: Infinity }}
+                  style={{ width: 11, height: 11, color: "var(--accent)" }}
+                  fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                >
+                  <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+                </motion.svg>
+              </div>
             </div>
           )}
         </div>
@@ -502,3 +590,4 @@ export function Works() {
 }
 
 export default Works;
+

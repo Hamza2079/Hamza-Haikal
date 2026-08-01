@@ -22,47 +22,9 @@
 }
 
 /* ═══════════════════════════════════════════
-   DARK MODE — Obsidian + Electric Amber
+   LIGHT MODE (DEFAULT) — Sandstone + Warm Amber
 ═══════════════════════════════════════════ */
 :root,
-[data-theme="dark"] {
-  --bg:          #0B0B0D;
-  --bg-surface:  #131316;
-  --bg-elevated: #1C1C21;
-  --bg-inverse:  #F5F2EB;
-  --bg-footer:   #060608;
-
-  --text-primary:   #F5F2EB;
-  --text-secondary: rgba(245,242,235,0.70);
-  --text-muted:     rgba(245,242,235,0.42);
-  --text-inverse:   #0B0B0D;
-
-  --accent:        #E8380C;
-  --accent-hover:  #FF4F24;
-  --spray-accent:  #E8380C;
-  --accent-dim:    rgba(232,56,12,0.18);
-  --accent-glow:   rgba(232,56,12,0.26);
-
-  --tape-bg:     rgba(232,56,12,0.28);
-  --border:      rgba(245,242,235,0.12);
-  --border-strong: rgba(245,242,235,0.25);
-  --border-ink:  #F5F2EB;
-
-  --shadow-hard:     6px 6px 0 0 #E8380C;
-  --shadow-hard-ink: 6px 6px 0 0 #F5F2EB;
-  --shadow-hard-dark:6px 6px 0 0 #0B0B0D;
-
-  /* Glass panel */
-  --glass-bg:     rgba(19,19,22,0.60);
-  --glass-border: rgba(245,242,235,0.14);
-
-  --scrollbar-thumb: #2E2E38;
-  color-scheme: dark;
-}
-
-/* ═══════════════════════════════════════════
-   LIGHT MODE — Sandstone + Warm Amber
-═══════════════════════════════════════════ */
 [data-theme="light"] {
   --bg:          #EAE5DB;
   --bg-surface:  #F5F2EA;
@@ -95,6 +57,43 @@
 
   --scrollbar-thumb: #C5BFB2;
   color-scheme: light;
+}
+
+/* ═══════════════════════════════════════════
+   DARK MODE — Obsidian + Electric Amber
+═══════════════════════════════════════════ */
+[data-theme="dark"] {
+  --bg:          #0B0B0D;
+  --bg-surface:  #131316;
+  --bg-elevated: #1C1C21;
+  --bg-inverse:  #F5F2EB;
+  --bg-footer:   #060608;
+
+  --text-primary:   #F5F2EB;
+  --text-secondary: rgba(245,242,235,0.70);
+  --text-muted:     rgba(245,242,235,0.42);
+  --text-inverse:   #0B0B0D;
+
+  --accent:        #E8380C;
+  --accent-hover:  #FF4F24;
+  --spray-accent:  #E8380C;
+  --accent-dim:    rgba(232,56,12,0.18);
+  --accent-glow:   rgba(232,56,12,0.26);
+
+  --tape-bg:     rgba(232,56,12,0.28);
+  --border:      rgba(245,242,235,0.12);
+  --border-strong: rgba(245,242,235,0.25);
+  --border-ink:  #F5F2EB;
+
+  --shadow-hard:     6px 6px 0 0 #E8380C;
+  --shadow-hard-ink: 6px 6px 0 0 #F5F2EB;
+  --shadow-hard-dark:6px 6px 0 0 #0B0B0D;
+
+  --glass-bg:     rgba(19,19,22,0.60);
+  --glass-border: rgba(245,242,235,0.14);
+
+  --scrollbar-thumb: #2E2E38;
+  color-scheme: dark;
 }
 
 /* ═══════════════════════════════════════════
