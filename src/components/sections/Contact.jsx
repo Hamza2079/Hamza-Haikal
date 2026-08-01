@@ -321,7 +321,7 @@ export function Contact() {
                 letterSpacing: "0.1em",
                 color: "#4ADE80",
               }}>
-                AVAILABLE FOR FREELANCE
+                AVAILABLE FOR WORK
               </span>
             </div>
 

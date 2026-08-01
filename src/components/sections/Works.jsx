@@ -59,7 +59,7 @@ export function Works() {
   const project = featured[activeIdx];
 
   return (
-    <section id="works" style={{ background: "var(--bg-surface)", position: "relative" }}>
+    <section id="works" style={{ background: "var(--bg-surface)", position: "relative",paddingBottom: isMobile ? "20px" : "20px" }}>
       {/* Torn edge top — transitions from bg to bg-surface */}
       <div style={{
         position: "absolute",
@@ -69,6 +69,7 @@ export function Works() {
         height: 40,
         background: "var(--bg-surface)",
         zIndex: 2,
+        
       }} className="torn-edge-top" />
 
       {/* Outer: tall container creates scroll space */}
@@ -79,7 +80,6 @@ export function Works() {
           position: "sticky",
           top: 0,
           height: "100vh",
-          overflow: "hidden",
           background: "var(--bg-surface)",
           display: "flex",
           flexDirection: "column",
@@ -244,6 +244,7 @@ export function Works() {
               margin: "0 auto",
               minHeight: 0,
               position: "relative",
+              paddingBottom: isMobile ? "" : "110px",
             }}
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
@@ -264,7 +265,7 @@ export function Works() {
                   gap: isMobile ? 16 : 56,
                   alignItems: "center",
                   paddingTop: isMobile ? 12 : 24,
-                  paddingBottom: isMobile ? 12 : 24,
+                  paddingBottom: isMobile ? 12 : 64,
                 }}
               >
                 {/* ── Image — rotated, hard shadow, tactile peel card ── */}
@@ -497,6 +498,8 @@ export function Works() {
           {activeIdx < N - 1 && (
             <div style={{
               paddingBottom: isMobile ? 12 : 20,
+              paddingTop: isMobile ? 0 : 100,
+              marginTop: isMobile ? 0 : 100,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -508,6 +511,7 @@ export function Works() {
               <div style={{
                 display: "inline-flex",
                 alignItems: "center",
+                marginTop:isMobile ? 0 : "80px",
                 gap: 6,
                 padding: isMobile ? "4px 10px" : "6px 14px",
                 background: "var(--bg)",
