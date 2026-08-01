@@ -269,49 +269,94 @@ export function Hero() {
               style={{
                 borderTop: "1px solid var(--border)",
                 paddingTop: 20,
-                display: "flex", flexWrap: "wrap",
-                gap: "14px 40px", alignItems: "center",
+                display: "flex",
+                flexDirection: isMobile ? "column" : "row",
+                gap: isMobile ? 12 : "14px 40px",
+                alignItems: isMobile ? "stretch" : "center",
               }}
             >
-              {[
-                { k: "PROJECTS", val: 13, suffix: "+" },
-                { k: "EXPERIENCE", val: 1, suffix: "+ YR" },
-                { k: "CLIENTS", val: 1,  },
-              ].map(({ k, val, suffix }) => (
-                <div key={k} style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
-                  <span style={{
-                    fontFamily: "var(--font-mono)", fontSize: 9, fontWeight: 600,
-                    textTransform: "uppercase", letterSpacing: "0.1em",
-                    color: "var(--text-muted)",
-                  }}>{k}:</span>
-                  <span style={{
-                    fontFamily: "var(--font-mono)", fontSize: 15,
-                    fontWeight: 700, color: "var(--spray-accent)",
-                  }}>
-                    <AnimatedCounter value={val} suffix={suffix} />
-                  </span>
-                </div>
-              ))}
-
-              <div style={{ display: "flex", gap: 18, marginLeft: "auto" }}>
+              {/* Stats counters */}
+              <div style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: isMobile ? "space-between" : "flex-start",
+                gap: isMobile ? 8 : 40,
+                flexWrap: "wrap",
+              }}>
                 {[
-                  { label: "GITHUB",   href: "https://github.com/Hamza2079" },
-                  { label: "LINKEDIN", href: "https://linkedin.com/in/hamza-haikal" },
-                ].map(({ label, href }) => (
-                  <motion.a
-                    key={label} href={href} target="_blank" rel="noreferrer"
-                    style={{
-                      fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700,
-                      textTransform: "uppercase", letterSpacing: "0.1em",
+                  { k: "PROJECTS", val: 13, suffix: "+" },
+                  { k: "EXPERIENCE", val: 1, suffix: "+ YR" },
+                  { k: "CLIENTS", val: 1,  },
+                ].map(({ k, val, suffix }) => (
+                  <div key={k} style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
+                    <span style={{
+                      fontFamily: "var(--font-mono)", fontSize: isMobile ? 8.5 : 9, fontWeight: 600,
+                      textTransform: "uppercase", letterSpacing: "0.08em",
                       color: "var(--text-muted)",
-                      textDecoration: "underline",
-                      textDecorationColor: "var(--spray-accent)",
-                    }}
-                    whileHover={{ color: "var(--spray-accent)" }}
-                  >
-                    {label}
-                  </motion.a>
+                    }}>{k}:</span>
+                    <span style={{
+                      fontFamily: "var(--font-mono)", fontSize: isMobile ? 14 : 15,
+                      fontWeight: 700, color: "var(--spray-accent)",
+                    }}>
+                      <AnimatedCounter value={val} suffix={suffix} />
+                    </span>
+                  </div>
                 ))}
+              </div>
+
+              {/* Social links */}
+              <div style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: isMobile ? "space-between" : "flex-start",
+                gap: 16,
+                marginLeft: isMobile ? "0" : "auto",
+                paddingTop: isMobile ? 10 : 0,
+                borderTop: isMobile ? "1px dashed var(--border)" : "none",
+                width: isMobile ? "100%" : "auto",
+              }}>
+                {isMobile && (
+                  <span style={{
+                    fontFamily: "var(--font-mono)",
+                    fontSize: 9,
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.14em",
+                    color: "var(--text-muted)",
+                    opacity: 0.8,
+                  }}>
+                    // FIND_ME
+                  </span>
+                )}
+
+                <div style={{ display: "flex", alignItems: "center", gap: isMobile ? 10 : 18 }}>
+                  {[
+                    { label: "GITHUB ↗",   href: "https://github.com/Hamza2079" },
+                    { label: "LINKEDIN ↗", href: "https://linkedin.com/in/hamza-haikal" },
+                  ].map(({ label, href }) => (
+                    <motion.a
+                      key={label} href={href} target="_blank" rel="noreferrer"
+                      style={{
+                        fontFamily: "var(--font-mono)",
+                        fontSize: isMobile ? 10.5 : 10,
+                        fontWeight: 700,
+                        textTransform: "uppercase",
+                        letterSpacing: "0.08em",
+                        color: "var(--text-primary)",
+                        padding: isMobile ? "4px 10px" : "0",
+                        background: isMobile ? "var(--bg-surface)" : "transparent",
+                        border: isMobile ? "1px solid var(--border)" : "none",
+                        textDecoration: isMobile ? "none" : "underline",
+                        textDecorationColor: "var(--spray-accent)",
+                        transition: "all 0.15s ease",
+                      }}
+                      whileHover={{ color: "var(--spray-accent)", borderColor: "var(--spray-accent)" }}
+                      whileTap={{ scale: 0.96 }}
+                    >
+                      {label}
+                    </motion.a>
+                  ))}
+                </div>
               </div>
             </motion.div>
           </div>
